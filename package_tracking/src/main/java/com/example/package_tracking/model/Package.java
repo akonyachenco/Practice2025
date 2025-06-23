@@ -35,12 +35,4 @@ public class Package {
     @OneToMany(mappedBy = "pkg", cascade = CascadeType.ALL)
     private List<Delivery> deliveries = new ArrayList<>();
 
-    public void addDelivery(Delivery delivery) {
-        deliveries.add(delivery);
-        delivery.setPkg(this);
-    }
-    public void removeDelivery(Delivery delivery) {
-        deliveries.remove(delivery);
-        delivery.setPkg(null);
-    }
 }

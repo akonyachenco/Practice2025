@@ -1,6 +1,6 @@
 package com.example.package_tracking.controller;
 
-import com.example.package_tracking.model.Delivery;
+import com.example.package_tracking.dto.DeliveryStatusDto;
 import com.example.package_tracking.model.DeliveryStatus;
 import com.example.package_tracking.service.DeliveryStatusService;
 import lombok.AllArgsConstructor;
@@ -17,41 +17,56 @@ public class DeliveryStatusController {
     private final DeliveryStatusService deliveryStatusService;
 
     @GetMapping
-    public List<DeliveryStatus> findAllDeliveryStatuses() {
+    public List<DeliveryStatusDto> findAllDeliveryStatuses() {
         return deliveryStatusService.findAll();
     }
 
-    @GetMapping("find-by-delivery")
-    public List<DeliveryStatus> findAllByDelivery(@RequestBody Delivery delivery) {
-        return deliveryStatusService.findAllByDelivery(delivery);
+    @GetMapping("/{id}")
+    public Optional<DeliveryStatusDto> findById(@PathVariable Long id) {
+        return deliveryStatusService.findById(id);
     }
 
-    @GetMapping("/{status}")
-    public List<DeliveryStatus> findAllByStatus(@PathVariable String status) {
+    @GetMapping("by-delivery/{deliveryID}")
+    public List<DeliveryStatusDto> findAllByDeliveryID(@PathVariable Long deliveryID) {
+        return deliveryStatusService.findAllByDelivery_DeliveryID(deliveryID);
+    }
+
+    @GetMapping("by-user/{userID}")
+    public List<DeliveryStatusDto> findAllByUserID(@PathVariable Long userID) {
+        return deliveryStatusService.findAllByDelivery_Pkg_User_UserID(userID);
+    }
+
+    @GetMapping("/by-status/{status}")
+    public List<DeliveryStatusDto> findAllByStatus(@PathVariable String status) {
         return deliveryStatusService.findAllByStatus(status);
     }
 
-    @GetMapping("find-by-tracking/{tracking_number}")
-    public Optional<DeliveryStatus> findByPackageTrackingNumber(@PathVariable String tracking_number) {
+    @GetMapping("/by-tracking-number/{tracking_number}")
+    public Optional<DeliveryStatusDto> findByPackageTrackingNumber(@PathVariable String tracking_number) {
         return deliveryStatusService.findByDeliveryPkgTrackingNumber(tracking_number);
     }
 
-    @PostMapping("create-delivery-status")
-    public DeliveryStatus createDeliveryStatus(@RequestBody DeliveryStatus deliveryStatus) {
-        return  deliveryStatusService.createDeliveryStatus(deliveryStatus);
+    @PostMapping("create")
+    public DeliveryStatusDto createDeliveryStatus(@RequestBody DeliveryStatusDto deliveryStatusDto) {
+        return  deliveryStatusService.createDeliveryStatus(deliveryStatusDto);
     }
 
-    @PutMapping("update-delivery-status")
-    public DeliveryStatus updateDeliveryStatus(DeliveryStatus deliveryStatus) {
-        return deliveryStatusService.updateDeliveryStatus(deliveryStatus);
+    @PutMapping("update")
+    public DeliveryStatusDto updateDeliveryStatus(DeliveryStatusDto deliveryStatusDto) {
+        return deliveryStatusService.updateDeliveryStatus(deliveryStatusDto);
     }
 
-    @DeleteMapping("delete-delivery-status")
-    public void deleteDeliveryStatus(@RequestBody DeliveryStatus deliveryStatus) {
-        deliveryStatusService.deleteDeliveryStatus(deliveryStatus);
+    @DeleteMapping("delete")
+    public void deleteDeliveryStatus(@RequestBody DeliveryStatusDto deliveryStatusDto) {
+        deliveryStatusService.deleteDeliveryStatus(deliveryStatusDto);
     }
 
-    @DeleteMapping("delete-delivery-status/{tracking_number}")
+    @DeleteMapping("delete/{id}")
+    public void deleteById(@PathVariable Long id) {
+        deliveryStatusService.deleteById(id);
+    }
+
+    @DeleteMapping("delete/{tracking_number}")
     public void deleteByPackageTrackingNumber(@PathVariable String tracking_number) {
         deliveryStatusService.deleteByDeliveryPkgTrackingNumber(tracking_number);
     }

@@ -9,7 +9,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface DeliveryRepository extends JpaRepository<Delivery, Long> {
-    List<Delivery> findAllByCourierService(CourierService courierService);
-    Optional<Delivery> findByPkg(Package pkg);
-    void deleteByPkg_PackageID(long pkgID);
+    List<Delivery> findAllByCourierService_CourierServiceID(Long courierServiceID);
+
+    Optional<Delivery> findByPkg_PackageID(Long packageID);
+    void deleteByPkg_PackageID(Long pkgID);
 }

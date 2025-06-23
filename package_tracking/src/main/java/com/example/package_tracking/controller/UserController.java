@@ -19,27 +19,37 @@ public class UserController {
         return userService.findAll();
     }
 
-    @GetMapping("/{email}")
+    @GetMapping("/{id}")
+    public Optional<UserDto> findById(@PathVariable Long id) {
+        return userService.findById(id);
+    }
+
+    @GetMapping("by-email/{email}")
     public Optional<UserDto> findUserByEmail(@PathVariable String email) {
         return userService.findUserByEmail(email);
     }
 
-    @PostMapping("create-user")
-    public UserDto createUser(@RequestBody UserDto user) {
-        return userService.createUser(user);
+    @PostMapping("create")
+    public UserDto createUser(@RequestBody UserDto userDto) {
+        return userService.createUser(userDto);
     }
 
-    @PutMapping("update-user")
-    public UserDto updateUser(@RequestBody UserDto user) {
-        return userService.updateUser(user);
+    @PutMapping("update")
+    public UserDto updateUser(@RequestBody UserDto userDto) {
+        return userService.updateUser(userDto);
     }
 
-    @DeleteMapping("delete-user")
-    public void deleteUser(@RequestBody UserDto user) {
-        userService.deleteUser(user);
+    @DeleteMapping("delete")
+    public void deleteUser(@RequestBody UserDto userDto) {
+        userService.deleteUser(userDto);
     }
 
-    @DeleteMapping("delete-user/{email}")
+    @DeleteMapping("delete/{id}")
+    public void deleteById(@PathVariable Long id) {
+        userService.deleteById(id);
+    }
+
+    @DeleteMapping("delete/by-email/{email}")
     public void deleteUserByEmail(@PathVariable String email) {
         userService.deleteUserByEmail(email);
     }

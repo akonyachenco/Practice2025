@@ -1,18 +1,17 @@
 package com.example.package_tracking.service;
 
 import com.example.package_tracking.dto.PackageDto;
-import com.example.package_tracking.dto.UserDto;
-import com.example.package_tracking.model.Package;
-import com.example.package_tracking.model.User;
 
 import java.util.Optional;
 import java.util.List;
 
 public interface PackageService {
     List<PackageDto> findAll();
-    List<PackageDto> findAllByUser(UserDto user);
+    List<PackageDto> findAllByUser_UserID(Long userID);
+    Optional<PackageDto> findById(Long id);
     Optional<PackageDto> findByTrackingNumber(String trackingNumber);
     PackageDto createPackage(PackageDto pkg);
     PackageDto updatePackage(PackageDto pkg);
     void deletePackage(PackageDto pkg);
+    void deleteById(Long id);
 }

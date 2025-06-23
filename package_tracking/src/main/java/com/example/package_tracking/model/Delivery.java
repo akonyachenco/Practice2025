@@ -34,13 +34,4 @@ public class Delivery {
     @OneToMany(mappedBy = "delivery", cascade = CascadeType.ALL)
     private List<DeliveryStatus> statusHistory = new ArrayList<>();
 
-    public void addStatusHistory(DeliveryStatus status) {
-        statusHistory.add(status);
-        status.setDelivery(this);
-    }
-    public void removeStatusHistory(DeliveryStatus status) {
-        statusHistory.remove(status);
-        status.setDelivery(null);
-    }
-
 }

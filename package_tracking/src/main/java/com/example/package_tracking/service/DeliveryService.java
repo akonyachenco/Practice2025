@@ -1,19 +1,20 @@
 package com.example.package_tracking.service;
 
-import com.example.package_tracking.model.CourierService;
-import com.example.package_tracking.model.Delivery;
-import com.example.package_tracking.model.Package;
+import com.example.package_tracking.dto.DeliveryDto;
+
 
 
 import java.util.List;
 import java.util.Optional;
 
 public interface DeliveryService {
-    List<Delivery> findAll();
-    List<Delivery> findAllByCourierService(CourierService courierService);
-    Optional<Delivery> findByPkg(Package pkg);
-    Delivery createDelivery(Delivery delivery);
-    Delivery updateDelivery(Delivery delivery);
-    void deleteDelivery(Delivery delivery);
+    List<DeliveryDto> findAll();
+    List<DeliveryDto> findAllByCourierService_CourierServiceID(Long courierServiceID);
+    Optional<DeliveryDto> findById(Long id);
+    Optional<DeliveryDto> findByPkg_PackageID(Long packageID);
+    DeliveryDto createDelivery(DeliveryDto delivery);
+    DeliveryDto updateDelivery(DeliveryDto delivery);
+    void deleteDelivery(DeliveryDto delivery);
     void deleteByPkg_PackageID(long pkgID);
+    void deleteById(Long id);
 }

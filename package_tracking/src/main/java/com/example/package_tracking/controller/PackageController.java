@@ -21,28 +21,38 @@ public class PackageController {
         return packageService.findAll();
     }
 
-    @GetMapping("find-by-user")
-    public List<PackageDto> findAllByUser(@RequestBody UserDto user) {
-        return packageService.findAllByUser(user);
+    @GetMapping("/{id}")
+    public Optional<PackageDto> findById(@PathVariable Long id) {
+        return packageService.findById(id);
     }
 
-    @GetMapping("/{trackingNumber}")
+    @GetMapping("by-user/{userID}")
+    public List<PackageDto> findAllByUserID(@PathVariable Long userID) {
+        return packageService.findAllByUser_UserID(userID);
+    }
+
+    @GetMapping("/by-tracking-number/{trackingNumber}")
     public Optional<PackageDto> findByTrackingNumber(@PathVariable String trackingNumber) {
         return packageService.findByTrackingNumber(trackingNumber);
     }
 
-    @PostMapping("create-package")
-    public PackageDto createPackage(@RequestBody PackageDto pkg) {
-        return packageService.createPackage(pkg);
+    @PostMapping("create")
+    public PackageDto createPackage(@RequestBody PackageDto pkgDto) {
+        return packageService.createPackage(pkgDto);
     }
 
-    @PutMapping("update-package")
-    public PackageDto updatePackage(@RequestBody PackageDto pkg) {
-        return packageService.updatePackage(pkg);
+    @PutMapping("update")
+    public PackageDto updatePackage(@RequestBody PackageDto pkgDto) {
+        return packageService.updatePackage(pkgDto);
     }
 
-    @DeleteMapping("delete-package")
-    public void deletePackage(@RequestBody PackageDto pkg) {
-        packageService.deletePackage(pkg);
+    @DeleteMapping("delete")
+    public void deletePackage(@RequestBody PackageDto pkgDto) {
+        packageService.deletePackage(pkgDto);
+    }
+
+    @DeleteMapping("delete/{id}")
+    public void deleteById(@PathVariable Long id) {
+        packageService.deleteById(id);
     }
 }

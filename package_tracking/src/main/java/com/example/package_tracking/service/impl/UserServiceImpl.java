@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.AllArgsConstructor;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +29,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Transactional(readOnly = true)
+    public Optional<UserDto> findById(Long id) {
+        return  userRepository.findById(id)
+                .map(userMapping::toDto);
+    }
+
+    @Transactional(readOnly = true)
     public Optional<UserDto> findUserByEmail(String email) {
         return userRepository.findUserByEmail(email)
                 .map(userMapping::toDto);
@@ -37,18 +42,21 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     public UserDto createUser(UserDto user) {
-        User newUser = userMapping.toUser(user);
-        userRepository.save(newUser);
-        return user;
+        User newUser = userMapping.toEntity(user);
+        return userMapping.toDto( userRepository.save(newUser));
     }
 
     @Transactional
     public UserDto updateUser(UserDto user) {
         User upUser = userRepository.findById(user.getUserID()).orElse(null);
-        upUser.setEmail(user.getEmail());
-        upUser.setName(user.getName());
-        upUser.setPasswordHash(user.getPasswordHash());
-        upUser.setPhone(user.getPhone());
+        if(user.getEmail() != null)
+            upUser.setEmail(user.getEmail());
+        if(user.getName() != null)
+            upUser.setName(user.getName());
+        if(user.getPasswordHash() != null)
+            upUser.setPasswordHash(user.getPasswordHash());
+        if(user.getPhone() != null)
+            upUser.setPhone(user.getPhone());
         return userMapping.toDto(userRepository.save(upUser));
     }
 
@@ -61,5 +69,10 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void deleteUserByEmail(String email) {
         userRepository.deleteUserByEmail(email);
+    }
+
+    @Transactional
+    public void deleteById(Long id) {
+        userRepository.deleteById(id);
     }
 }

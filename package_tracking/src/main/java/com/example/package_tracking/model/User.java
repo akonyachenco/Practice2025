@@ -31,13 +31,4 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Package> packages = new ArrayList<>();
 
-    public void addPackage(Package pkg) {
-        packages.add(pkg);
-        pkg.setUser(this);
-    }
-    public void removePackage(Package pkg) {
-        packages.remove(pkg);
-        pkg.setUser(null);
-    }
-
 }

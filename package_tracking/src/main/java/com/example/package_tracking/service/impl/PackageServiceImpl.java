@@ -24,7 +24,6 @@ public class PackageServiceImpl implements PackageService {
     private final PackageRepository packageRepository;
     private final UserRepository userRepository;
     private final PackageMapping packageMapping;
-    private final UserMapping userMapping;
 
 
     @Transactional(readOnly = true)
@@ -34,9 +33,13 @@ public class PackageServiceImpl implements PackageService {
     }
 
     @Transactional(readOnly = true)
-    public List<PackageDto> findAllByUser(UserDto user) {
-        User findUser = userMapping.toUser(user);
-        return packageRepository.findAllByUser(findUser).stream().map(packageMapping::toDto).toList();
+    public Optional<PackageDto> findById(Long id) {
+        return packageRepository.findById(id).map(packageMapping::toDto);
+    }
+
+    @Transactional(readOnly = true)
+    public List<PackageDto> findAllByUser_UserID(Long userID) {
+        return packageRepository.findAllByUser_UserID(userID).stream().map(packageMapping::toDto).toList();
     }
 
     @Transactional(readOnly = true)
@@ -47,20 +50,27 @@ public class PackageServiceImpl implements PackageService {
     @Transactional
     public PackageDto createPackage(PackageDto pkg) {
         User user = userRepository.findById(pkg.getUserID()).orElse(null);
-        Package newPackage = packageMapping.toPackage(pkg);
+        Package newPackage = packageMapping.toEntity(pkg);
         newPackage.setUser(user);
         return packageMapping.toDto(packageRepository.save(newPackage));
     }
 
     @Transactional
     public PackageDto updatePackage(PackageDto pkg) {
-        User user = userRepository.findById(pkg.getUserID()).orElse(null);
         Package newPackage = packageRepository.findById(pkg.getPackageID()).orElse(null);
-        newPackage.setTrackingNumber(pkg.getTrackingNumber());
-        newPackage.setWeight(pkg.getWeight());
-        newPackage.setDimensions(pkg.getDimensions());
-        newPackage.setDescription(pkg.getDescription());
-        newPackage.setUser(user);
+        if(pkg.getTrackingNumber() != null)
+            newPackage.setTrackingNumber(pkg.getTrackingNumber());
+        if(pkg.getWeight() != null)
+            newPackage.setWeight(pkg.getWeight());
+        if(pkg.getDescription() != null)
+            newPackage.setDimensions(pkg.getDimensions());
+        if(pkg.getDescription() != null)
+            newPackage.setDescription(pkg.getDescription());
+
+        if(pkg.getUserID() != null) {
+            User user = userRepository.findById(pkg.getUserID()).orElse(null);
+            newPackage.setUser(user);
+        }
         return packageMapping.toDto(packageRepository.save(newPackage));
     }
 
@@ -68,6 +78,11 @@ public class PackageServiceImpl implements PackageService {
     public void deletePackage(PackageDto pkg) {
         Package findPackage = packageRepository.findById(pkg.getPackageID()).orElse(null);
         packageRepository.delete(findPackage);
+    }
+
+    @Transactional
+    public void deleteById(Long id) {
+        packageRepository.deleteById(id);
     }
 
 }

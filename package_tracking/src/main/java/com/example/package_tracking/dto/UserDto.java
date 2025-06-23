@@ -7,7 +7,7 @@ import java.util.List;
 
 @Data
 public class UserDto {
-    private long userID;
+    private Long userID;
     private String name;
     private String passwordHash;
     private String email;

@@ -1,6 +1,6 @@
 package com.example.package_tracking.controller;
 
-import com.example.package_tracking.model.CourierService;
+import com.example.package_tracking.dto.CourierServiceDto;
 import com.example.package_tracking.service.CourierServiceService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -16,42 +16,52 @@ public class CourierServiceController {
     private final CourierServiceService courierServiceService;
 
     @GetMapping
-    public List<CourierService> findAllCourierServices() {
+    public List<CourierServiceDto> findAllCourierServices() {
         return courierServiceService.findAll();
     }
 
-    @GetMapping("/{name}")
-    public Optional<CourierService> findByName(@PathVariable String name) {
+    @PostMapping("/{id}")
+    public Optional<CourierServiceDto> findById(@PathVariable Long id) {
+        return courierServiceService.findById(id);
+    }
+
+    @GetMapping("/by-name/{name}")
+    public Optional<CourierServiceDto> findByName(@PathVariable String name) {
         return courierServiceService.findByName(name);
     }
 
-    @GetMapping("/{email}")
-    public Optional<CourierService> findByEmail(@PathVariable String email) {
+    @GetMapping("/by-email/{email}")
+    public Optional<CourierServiceDto> findByEmail(@PathVariable String email) {
         return courierServiceService.findByEmail(email);
     }
 
-    @GetMapping("/{phone}")
-    public Optional<CourierService> findByPhone(@PathVariable String phone) {
+    @GetMapping("/by-phone/{phone}")
+    public Optional<CourierServiceDto> findByPhone(@PathVariable String phone) {
         return courierServiceService.findByPhone(phone);
     }
 
-    @PostMapping("create-courier-service")
-    public CourierService createCourierService(@RequestBody CourierService courierService) {
-        return courierServiceService.createCourierService(courierService);
+    @PostMapping("create")
+    public CourierServiceDto createCourierService(@RequestBody CourierServiceDto courierServiceDto) {
+        return courierServiceService.createCourierService(courierServiceDto);
     }
 
-    @PutMapping("update-courier-service")
-    public CourierService updateCourierService(@RequestBody CourierService courierService) {
-        return courierServiceService.updateCourierService(courierService);
+    @PutMapping("update")
+    public CourierServiceDto updateCourierService(@RequestBody CourierServiceDto courierServiceDto) {
+        return courierServiceService.updateCourierService(courierServiceDto);
     }
 
-    @DeleteMapping("delete-courier-service/{email}")
+    @DeleteMapping("delete/{email}")
     public void deleteByEmail(@PathVariable String email) {
         courierServiceService.deleteByEmail(email);
     }
 
-    @DeleteMapping("delete-courier-service")
-    public void deleteCourierService(@RequestBody CourierService courierService) {
-        courierServiceService.deleteCourierService(courierService);
+    @DeleteMapping("delete/{id}")
+    public void deleteById(@PathVariable Long id) {
+        courierServiceService.deleteById(id);
+    }
+
+    @DeleteMapping("delete")
+    public void deleteCourierService(@RequestBody CourierServiceDto courierServiceDto) {
+        courierServiceService.deleteCourierService(courierServiceDto);
     }
 }

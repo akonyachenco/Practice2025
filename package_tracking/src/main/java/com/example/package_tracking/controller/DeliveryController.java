@@ -1,8 +1,6 @@
 package com.example.package_tracking.controller;
 
-import com.example.package_tracking.model.CourierService;
-import com.example.package_tracking.model.Delivery;
-import com.example.package_tracking.model.Package;
+import com.example.package_tracking.dto.DeliveryDto;
 import com.example.package_tracking.service.DeliveryService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -18,38 +16,48 @@ public class DeliveryController {
     private final DeliveryService deliveryService;
 
     @GetMapping
-    public List<Delivery> findAllDeliveries() {
+    public List<DeliveryDto> findAllDeliveries() {
         return deliveryService.findAll();
     }
 
-    @GetMapping("find-by-courier-service")
-    public List<Delivery> findAllByCourierService(@RequestBody CourierService courierService) {
-        return deliveryService.findAllByCourierService(courierService);
+    @GetMapping("/{id}")
+    public Optional<DeliveryDto> findById(@PathVariable Long id) {
+        return deliveryService.findById(id);
     }
 
-    @GetMapping("find-by-package")
-    public Optional<Delivery> findByPackage(Package pkg) {
-        return deliveryService.findByPkg(pkg);
+    @GetMapping("by-courier-service/{courierServiceID}")
+    public List<DeliveryDto> findAllByCourierServiceID(@PathVariable Long courierServiceID) {
+        return deliveryService.findAllByCourierService_CourierServiceID(courierServiceID);
     }
 
-    @PostMapping("create-delivery")
-    public Delivery createDelivery(@RequestBody Delivery delivery) {
-        return deliveryService.createDelivery(delivery);
+    @GetMapping("by-package/{packageID}")
+    public Optional<DeliveryDto> findByPackageID(@PathVariable Long packageID) {
+        return deliveryService.findByPkg_PackageID(packageID);
     }
 
-    @PutMapping("update-delivery")
-    public Delivery updateDelivery(@RequestBody Delivery delivery) {
-        return deliveryService.updateDelivery(delivery);
+    @PostMapping("create")
+    public DeliveryDto createDelivery(@RequestBody DeliveryDto deliveryDto) {
+        return deliveryService.createDelivery(deliveryDto);
     }
 
-    @DeleteMapping("delete-delivery/{pkgID}")
+    @PutMapping("update")
+    public DeliveryDto updateDelivery(@RequestBody DeliveryDto deliveryDto) {
+        return deliveryService.updateDelivery(deliveryDto);
+    }
+
+    @DeleteMapping("delete/{pkgID}")
     public void deleteByPackageID(@PathVariable long pkgID) {
         deliveryService.deleteByPkg_PackageID(pkgID);
     }
 
-    @DeleteMapping("delete-delivery")
-    public void deleteDelivery(@RequestBody Delivery delivery) {
-        deliveryService.deleteDelivery(delivery);
+    @DeleteMapping("delete/{id}")
+    public void deleteById(@PathVariable Long id) {
+        deliveryService.deleteById(id);
+    }
+
+    @DeleteMapping("delete")
+    public void deleteDelivery(@RequestBody DeliveryDto deliveryDto) {
+        deliveryService.deleteDelivery(deliveryDto);
     }
 
 }

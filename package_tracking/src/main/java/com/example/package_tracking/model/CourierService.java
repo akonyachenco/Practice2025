@@ -29,13 +29,4 @@ public class CourierService {
 
     @OneToMany(mappedBy = "courierService", cascade = CascadeType.ALL)
     private List<Delivery> deliveries = new ArrayList<>();
-
-    public void addDelivery(Delivery delivery) {
-        deliveries.add(delivery);
-        delivery.setCourierService(this);
-    }
-    public void removeDelivery(Delivery delivery) {
-        deliveries.remove(delivery);
-        delivery.setCourierService(null);
-    }
 }

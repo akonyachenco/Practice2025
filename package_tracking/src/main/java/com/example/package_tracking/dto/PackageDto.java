@@ -2,12 +2,15 @@ package com.example.package_tracking.dto;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class PackageDto {
-    private long packageID;
+    private Long packageID;
     private String trackingNumber;
-    private float weight;
+    private Float weight;
     private String dimensions;
     private String description;
-    private long userID;
+    private Long userID;
+    private List<DeliveryDto> deliveries;
 }

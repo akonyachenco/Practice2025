@@ -9,6 +9,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PackageRepository extends JpaRepository<Package, Long> {
-    List<Package> findAllByUser(User user);
+    List<Package> findAllByUser_UserID(Long userID);
     Optional<Package> findByTrackingNumber(String trackingNumber);
 }

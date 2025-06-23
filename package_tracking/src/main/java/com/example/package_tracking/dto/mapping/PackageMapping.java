@@ -5,16 +5,17 @@ import com.example.package_tracking.model.Package;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = DeliveryMapping.class)
 public interface PackageMapping {
 
     @Mapping(target = "packageID", source = "packageID")
-    @Mapping(target = "userID", expression = "java(pkg.getUser().getUserID())")
+    @Mapping(target = "userID", source = "user.userID")
     PackageDto toDto(Package pkg);
 
 
     @Mapping(target = "packageID", source = "packageID", ignore = true)
     @Mapping(target = "user", ignore = true)
-    Package toPackage(PackageDto packageDto);
+    @Mapping(target = "deliveries", ignore = true)
+    Package toEntity(PackageDto packageDto);
 
 }
