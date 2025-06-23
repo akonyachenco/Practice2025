@@ -7,6 +7,7 @@ import com.example.package_tracking.dto.mapping.UserMapping;
 import com.example.package_tracking.model.User;
 import com.example.package_tracking.model.Package;
 import com.example.package_tracking.repository.PackageRepository;
+import com.example.package_tracking.repository.UserRepository;
 import com.example.package_tracking.service.PackageService;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,7 @@ import java.util.Optional;
 public class PackageServiceImpl implements PackageService {
 
     private final PackageRepository packageRepository;
+    private final UserRepository userRepository;
     private final PackageMapping packageMapping;
     private final UserMapping userMapping;
 
@@ -44,21 +46,28 @@ public class PackageServiceImpl implements PackageService {
 
     @Transactional
     public PackageDto createPackage(PackageDto pkg) {
+        User user = userRepository.findById(pkg.getUserID()).orElse(null);
         Package newPackage = packageMapping.toPackage(pkg);
-        packageRepository.save(newPackage);
-        return pkg;
+        newPackage.setUser(user);
+        return packageMapping.toDto(packageRepository.save(newPackage));
     }
 
     @Transactional
     public PackageDto updatePackage(PackageDto pkg) {
-        Package newPackage = packageMapping.toPackage(pkg);
-        packageRepository.save(newPackage);
-        return pkg;
+        User user = userRepository.findById(pkg.getUserID()).orElse(null);
+        Package newPackage = packageRepository.findById(pkg.getPackageID()).orElse(null);
+        newPackage.setTrackingNumber(pkg.getTrackingNumber());
+        newPackage.setWeight(pkg.getWeight());
+        newPackage.setDimensions(pkg.getDimensions());
+        newPackage.setDescription(pkg.getDescription());
+        newPackage.setUser(user);
+        return packageMapping.toDto(packageRepository.save(newPackage));
     }
 
     @Transactional
     public void deletePackage(PackageDto pkg) {
-        packageRepository.delete(packageMapping.toPackage(pkg));
+        Package findPackage = packageRepository.findById(pkg.getPackageID()).orElse(null);
+        packageRepository.delete(findPackage);
     }
 
 }

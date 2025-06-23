@@ -9,9 +9,12 @@ import org.mapstruct.Mapping;
 public interface PackageMapping {
 
     @Mapping(target = "packageID", source = "packageID")
-    Package toPackage(PackageDto packageDto);
-
-
     @Mapping(target = "userID", expression = "java(pkg.getUser().getUserID())")
     PackageDto toDto(Package pkg);
+
+
+    @Mapping(target = "packageID", source = "packageID", ignore = true)
+    @Mapping(target = "user", ignore = true)
+    Package toPackage(PackageDto packageDto);
+
 }

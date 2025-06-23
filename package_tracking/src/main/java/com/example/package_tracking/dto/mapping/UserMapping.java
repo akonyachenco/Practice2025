@@ -13,6 +13,6 @@ public interface UserMapping {
     @Mapping(target = "userID", source = "userID")
     UserDto toDto(User user);
 
-
+    @Mapping(target = "userID", source = "userID", ignore = true)
     User toUser(UserDto userDto);
 }

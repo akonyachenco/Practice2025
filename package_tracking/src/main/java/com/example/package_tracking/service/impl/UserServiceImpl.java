@@ -44,16 +44,21 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     public UserDto updateUser(UserDto user) {
-        User newUser = userMapping.toUser(user);
-        userRepository.save(newUser);
-        return user;
+        User upUser = userRepository.findById(user.getUserID()).orElse(null);
+        upUser.setEmail(user.getEmail());
+        upUser.setName(user.getName());
+        upUser.setPasswordHash(user.getPasswordHash());
+        upUser.setPhone(user.getPhone());
+        return userMapping.toDto(userRepository.save(upUser));
     }
 
     @Transactional
     public void deleteUser(UserDto user) {
-        userRepository.delete(userMapping.toUser(user));
+        User delUser = userRepository.findById(user.getUserID()).orElse(null);
+        userRepository.delete(delUser);
     }
 
+    @Transactional
     public void deleteUserByEmail(String email) {
         userRepository.deleteUserByEmail(email);
     }
