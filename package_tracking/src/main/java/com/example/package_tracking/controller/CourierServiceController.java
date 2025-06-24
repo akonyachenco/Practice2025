@@ -25,25 +25,25 @@ public class CourierServiceController {
     }
 
     @PostMapping("/{id}")
-    public Optional<CourierServiceDto> findById(@PathVariable Long id) {
+    public CourierServiceDto findById(@PathVariable Long id) {
         log.info("Find courier service by id: {}", id);
         return courierServiceService.findById(id);
     }
 
     @GetMapping("/by-name/{name}")
-    public Optional<CourierServiceDto> findByName(@PathVariable String name) {
+    public CourierServiceDto findByName(@PathVariable String name) {
         log.info("Find courier service by name: {}", name);
         return courierServiceService.findByName(name);
     }
 
     @GetMapping("/by-email/{email}")
-    public Optional<CourierServiceDto> findByEmail(@PathVariable String email) {
+    public CourierServiceDto findByEmail(@PathVariable String email) {
         log.info("Find courier service by email: {}", email);
         return courierServiceService.findByEmail(email);
     }
 
     @GetMapping("/by-phone/{phone}")
-    public Optional<CourierServiceDto> findByPhone(@PathVariable String phone) {
+    public CourierServiceDto findByPhone(@PathVariable String phone) {
         log.info("Find courier service by phone: {}", phone);
         return courierServiceService.findByPhone(phone);
     }

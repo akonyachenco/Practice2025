@@ -25,7 +25,7 @@ public class DeliveryController {
     }
 
     @GetMapping("/{id}")
-    public Optional<DeliveryDto> findById(@PathVariable Long id) {
+    public DeliveryDto findById(@PathVariable Long id) {
         log.info("Find delivery by id: {}", id);
         return deliveryService.findById(id);
     }
@@ -37,7 +37,7 @@ public class DeliveryController {
     }
 
     @GetMapping("by-package/{packageID}")
-    public Optional<DeliveryDto> findByPackageID(@PathVariable Long packageID) {
+    public DeliveryDto findByPackageID(@PathVariable Long packageID) {
         log.info("Find delivery by package id: {}", packageID);
         return deliveryService.findByPkg_PackageID(packageID);
     }

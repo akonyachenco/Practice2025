@@ -24,13 +24,13 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public Optional<UserDto> findById(@PathVariable Long id) {
+    public UserDto findById(@PathVariable Long id) {
         log.info("Find user by id: {}", id);
         return userService.findById(id);
     }
 
     @GetMapping("by-email/{email}")
-    public Optional<UserDto> findUserByEmail(@PathVariable String email) {
+    public UserDto findUserByEmail(@PathVariable String email) {
         log.info("Find user by email: {}", email);
         return userService.findUserByEmail(email);
     }

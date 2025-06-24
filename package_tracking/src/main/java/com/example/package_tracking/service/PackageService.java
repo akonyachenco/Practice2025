@@ -8,8 +8,8 @@ import java.util.List;
 public interface PackageService {
     List<PackageDto> findAll();
     List<PackageDto> findAllByUser_UserID(Long userID);
-    Optional<PackageDto> findById(Long id);
-    Optional<PackageDto> findByTrackingNumber(String trackingNumber);
+    PackageDto findById(Long id);
+    PackageDto findByTrackingNumber(String trackingNumber);
     PackageDto createPackage(PackageDto pkg);
     PackageDto updatePackage(PackageDto pkg);
     void deletePackage(PackageDto pkg);

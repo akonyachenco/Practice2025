@@ -25,7 +25,7 @@ public class DeliveryStatusController {
     }
 
     @GetMapping("/{id}")
-    public Optional<DeliveryStatusDto> findById(@PathVariable Long id) {
+    public DeliveryStatusDto findById(@PathVariable Long id) {
         log.info("Find delivery status by id: {}", id);
         return deliveryStatusService.findById(id);
     }
@@ -49,7 +49,7 @@ public class DeliveryStatusController {
     }
 
     @GetMapping("/by-tracking-number/{tracking_number}")
-    public Optional<DeliveryStatusDto> findByPackageTrackingNumber(@PathVariable String tracking_number) {
+    public DeliveryStatusDto findByPackageTrackingNumber(@PathVariable String tracking_number) {
         log.info("Find delivery status by package tracking number: {}", tracking_number);
         return deliveryStatusService.findByDeliveryPkgTrackingNumber(tracking_number);
     }

@@ -10,8 +10,8 @@ import java.util.Optional;
 public interface DeliveryService {
     List<DeliveryDto> findAll();
     List<DeliveryDto> findAllByCourierService_CourierServiceID(Long courierServiceID);
-    Optional<DeliveryDto> findById(Long id);
-    Optional<DeliveryDto> findByPkg_PackageID(Long packageID);
+    DeliveryDto findById(Long id);
+    DeliveryDto findByPkg_PackageID(Long packageID);
     DeliveryDto createDelivery(DeliveryDto delivery);
     DeliveryDto updateDelivery(DeliveryDto delivery);
     void deleteDelivery(DeliveryDto delivery);

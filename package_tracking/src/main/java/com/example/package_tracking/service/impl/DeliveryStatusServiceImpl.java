@@ -3,12 +3,14 @@ package com.example.package_tracking.service.impl;
 import com.example.package_tracking.dto.DeliveryStatusDto;
 import com.example.package_tracking.dto.mapping.DeliveryMapping;
 import com.example.package_tracking.dto.mapping.DeliveryStatusMapping;
+import com.example.package_tracking.exception.EntityNotFoundException;
 import com.example.package_tracking.model.Delivery;
 import com.example.package_tracking.model.DeliveryStatus;
 import com.example.package_tracking.repository.DeliveryRepository;
 import com.example.package_tracking.repository.DeliveryStatusRepository;
 import com.example.package_tracking.service.DeliveryStatusService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class DeliveryStatusServiceImpl implements DeliveryStatusService {
@@ -31,9 +34,13 @@ public class DeliveryStatusServiceImpl implements DeliveryStatusService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<DeliveryStatusDto> findById(Long id) {
+    public DeliveryStatusDto findById(Long id) {
         return deliveryStatusRepository.findById(id)
-                .map(deliveryStatusMapping::toDto);
+                .map(deliveryStatusMapping::toDto)
+                .orElseThrow(() -> {
+                    log.warn("Delivery status not found with id {}", id);
+                    return EntityNotFoundException.create("Delivery status not found with id", id);
+                        });
     }
 
     @Transactional(readOnly = true)
@@ -55,14 +62,22 @@ public class DeliveryStatusServiceImpl implements DeliveryStatusService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<DeliveryStatusDto> findByDeliveryPkgTrackingNumber(String tracking_number) {
+    public DeliveryStatusDto findByDeliveryPkgTrackingNumber(String tracking_number) {
         return deliveryStatusRepository.findByDeliveryPkgTrackingNumber(tracking_number)
-                .map(deliveryStatusMapping::toDto);
+                .map(deliveryStatusMapping::toDto)
+                .orElseThrow(() -> {
+                    log.warn("Delivery status not found with tracking_number {}", tracking_number);
+                    return EntityNotFoundException.create("Delivery status not found with tracking_number", tracking_number);
+                });
     }
 
     @Transactional
     public DeliveryStatusDto createDeliveryStatus(DeliveryStatusDto deliveryStatusDto) {
-        Delivery delivery = deliveryRepository.findById(deliveryStatusDto.getDeliveryID()).orElse(null);
+        Delivery delivery = deliveryRepository.findById(deliveryStatusDto.getDeliveryID())
+                .orElseThrow(() -> {
+                    log.warn("Delivery not found with id {}", deliveryStatusDto.getDeliveryID());
+                    return EntityNotFoundException.create("Delivery not found with id", deliveryStatusDto.getDeliveryID());
+                });
         DeliveryStatus deliveryStatus = deliveryStatusMapping.toEntity(deliveryStatusDto);
         deliveryStatus.setDelivery(delivery);
         return deliveryStatusMapping.toDto(deliveryStatusRepository.save(deliveryStatus));
@@ -70,7 +85,11 @@ public class DeliveryStatusServiceImpl implements DeliveryStatusService {
 
     @Transactional
     public DeliveryStatusDto updateDeliveryStatus(DeliveryStatusDto deliveryStatusDto) {
-        DeliveryStatus deliveryStatus = deliveryStatusRepository.findById(deliveryStatusDto.getDeliveryStatusID()).orElse(null);
+        DeliveryStatus deliveryStatus = deliveryStatusRepository.findById(deliveryStatusDto.getDeliveryStatusID())
+                .orElseThrow(() -> {
+                    log.warn("Delivery status not found with id {}", deliveryStatusDto.getDeliveryStatusID());
+                    return EntityNotFoundException.create("Delivery status not found with id", deliveryStatusDto.getDeliveryStatusID());
+                });
         if(deliveryStatusDto.getDeliveryStatusID() != null)
             deliveryStatus.setStatus(deliveryStatusDto.getStatus());
         if(deliveryStatusDto.getStatus() != null)
@@ -87,7 +106,11 @@ public class DeliveryStatusServiceImpl implements DeliveryStatusService {
 
     @Transactional
     public void deleteDeliveryStatus(DeliveryStatusDto deliveryStatusDto) {
-        DeliveryStatus deliveryStatus = deliveryStatusRepository.findById(deliveryStatusDto.getDeliveryStatusID()).orElse(null);
+        DeliveryStatus deliveryStatus = deliveryStatusRepository.findById(deliveryStatusDto.getDeliveryStatusID())
+                .orElseThrow(() -> {
+                    log.warn("Delivery status not found with id {}", deliveryStatusDto.getDeliveryStatusID());
+                    return EntityNotFoundException.create("Delivery status not found with id", deliveryStatusDto.getDeliveryStatusID());
+                });
         deliveryStatusRepository.delete(deliveryStatus);
     }
 

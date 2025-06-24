@@ -8,10 +8,10 @@ import java.util.Optional;
 
 public interface CourierServiceService {
     List<CourierServiceDto> findAll();
-    Optional<CourierServiceDto> findById(Long id);
-    Optional<CourierServiceDto> findByName(String name);
-    Optional<CourierServiceDto> findByEmail(String email);
-    Optional<CourierServiceDto> findByPhone(String phone);
+    CourierServiceDto findById(Long id);
+    CourierServiceDto findByName(String name);
+    CourierServiceDto findByEmail(String email);
+    CourierServiceDto findByPhone(String phone);
     CourierServiceDto createCourierService(CourierServiceDto courierService);
     CourierServiceDto updateCourierService(CourierServiceDto courierService);
     void deleteCourierService(CourierServiceDto courierService);

@@ -25,7 +25,7 @@ public class PackageController {
     }
 
     @GetMapping("/{id}")
-    public Optional<PackageDto> findById(@PathVariable Long id) {
+    public PackageDto findById(@PathVariable Long id) {
         log.info("Find package by id: {}", id);
         return packageService.findById(id);
     }
@@ -37,7 +37,7 @@ public class PackageController {
     }
 
     @GetMapping("/by-tracking-number/{trackingNumber}")
-    public Optional<PackageDto> findByTrackingNumber(@PathVariable String trackingNumber) {
+    public PackageDto findByTrackingNumber(@PathVariable String trackingNumber) {
         log.info("Find package by tracking number: {}", trackingNumber);
         return packageService.findByTrackingNumber(trackingNumber);
     }

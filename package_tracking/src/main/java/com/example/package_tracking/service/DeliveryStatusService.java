@@ -11,8 +11,8 @@ public interface DeliveryStatusService {
     List<DeliveryStatusDto> findAllByDelivery_DeliveryID(Long deliveryID);
     List<DeliveryStatusDto> findAllByStatus(String status);
     List<DeliveryStatusDto> findAllByDelivery_Pkg_User_UserID(Long userID);
-    Optional<DeliveryStatusDto> findById(Long id);
-    Optional<DeliveryStatusDto> findByDeliveryPkgTrackingNumber(String tracking_number);
+    DeliveryStatusDto findById(Long id);
+    DeliveryStatusDto findByDeliveryPkgTrackingNumber(String tracking_number);
     DeliveryStatusDto createDeliveryStatus(DeliveryStatusDto deliveryStatus);
     DeliveryStatusDto updateDeliveryStatus(DeliveryStatusDto deliveryStatus);
     void deleteDeliveryStatus(DeliveryStatusDto deliveryStatus);
