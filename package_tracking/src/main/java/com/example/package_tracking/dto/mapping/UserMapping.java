@@ -11,7 +11,7 @@ import org.mapstruct.Mapping;
 public interface UserMapping {
 
     @Mapping(target = "userID", source = "userID")
-
+    @Mapping(target = "passwordHash", ignore = true)
     UserDto toDto(User user);
 
     @Mapping(target = "userID", source = "userID", ignore = true)
