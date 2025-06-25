@@ -1,0 +1,63 @@
+<div>
+  <h1>Courier Services Info</h1>
+</div>
+<div style="margin: 30px">
+  <form (ngSubmit)="onSubmit()">
+    <label for="name" style="display: block">Name*</label>
+    <input id="name" [(ngModel)]="courierService.name" name="name"
+           type="text" placeholder="Enter name" required>
+    <br>
+
+    <label for="phone" style="display: block">Phone*</label>
+    <input id="phone" [(ngModel)]="courierService.phone" name="phone"
+           type="text" placeholder="Enter phone" required>
+    <br>
+
+    <label for="email" style="display: block">Email</label>
+    <input id="email" [(ngModel)]="courierService.email" name="email"
+           type="email" placeholder="Enter email">
+    <br>
+
+    <label for="website" style="display: block">Website</label>
+    <input id="website" [(ngModel)]="courierService.website" name="website"
+           type="url" placeholder="Enter website URL">
+    <br>
+
+    <button class="form-button" type="submit">{{update ? 'Update' : 'Create'}} service</button>
+    @if(update) {
+      <br>
+      <button class="form-button" (click)="clickCancelButton()">Cancel</button>
+    }
+  </form>
+</div>
+
+<div>
+  <table>
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Phone</th>
+      <th>Email</th>
+      <th>Website</th>
+      <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+      @for (service of courierServices; track service.courierServiceID) {
+        <tr>
+          <td>{{service.courierServiceID}}</td>
+          <td>{{service.name}}</td>
+          <td>{{service.phone}}</td>
+          <td>{{service.email}}</td>
+          <td>{{service.website}}</td>
+          <td>
+            <button (click)="clickUpdateButton(service)">Update</button>
+            <span> | </span>
+            <button (click)="clickDeleteButton(service.courierServiceID!)">Delete</button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

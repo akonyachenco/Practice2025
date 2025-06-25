@@ -1,0 +1,22 @@
+table{
+  margin-left: 30px;
+  margin-top: 10px;
+}
+td, table, th{
+  border: 2px solid black;
+  border-collapse: collapse;
+}
+
+td, th{
+  text-align: center;
+  padding: 10px;
+}
+
+button.form-button{
+  margin-top: 8px;
+}
+
+h1{
+  text-align: center;
+}
+

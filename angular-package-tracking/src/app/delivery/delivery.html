@@ -1,1 +1,63 @@
-<h1>Здесь будут доставки</h1>
+<div>
+  <h1>Deliveries Info</h1>
+</div>
+<div style="margin: 30px">
+  <form (ngSubmit)="onSubmit()">
+    <label for="cost" style="display: block">Cost (rub.)</label>
+    <input id="cost" [(ngModel)]="delivery.cost" name="cost"
+           type="number" placeholder="Enter cost">
+    <br>
+
+    <label for="estimatedDeliveryDate" style="display: block">Estimated Delivery Date</label>
+    <input id="estimatedDeliveryDate" [(ngModel)]="delivery.estimatedDeliveryDate"
+           name="estimatedDeliveryDate" type="datetime-local">
+    <br>
+
+    <label for="packageID" style="display: block">Package ID*</label>
+    <input id="packageID" [(ngModel)]="delivery.packageID" name="packageID"
+           type="number" placeholder="Enter package ID" required>
+    <br>
+
+    <label for="courierServiceID" style="display: block">Courier Service ID*</label>
+    <input id="courierServiceID" [(ngModel)]="delivery.courierServiceID"
+           name="courierServiceID" type="number" placeholder="Enter courier service ID" required>
+    <br>
+
+    <button class="form-button" type="submit">{{update ? 'Update' : 'Create'}} delivery</button>
+    @if(update) {
+      <br>
+      <button class="form-button" (click)="clickCancelButton()">Cancel</button>
+    }
+  </form>
+</div>
+
+<div>
+  <table>
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Cost</th>
+      <th>Estimated Date</th>
+      <th>Package ID</th>
+      <th>Courier Service ID</th>
+      <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+      @for (delivery of deliveries; track delivery.deliveryID) {
+        <tr>
+          <td>{{delivery.deliveryID}}</td>
+          <td>{{delivery.cost}} rub.</td>
+          <td>{{delivery.estimatedDeliveryDate}}</td>
+          <td>{{delivery.packageID}}</td>
+          <td>{{delivery.courierServiceID}}</td>
+          <td>
+            <button (click)="clickUpdateButton(delivery)">Update</button>
+            <span> | </span>
+            <button (click)="clickDeleteButton(delivery.deliveryID!)">Delete</button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

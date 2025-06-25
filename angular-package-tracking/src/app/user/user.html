@@ -3,13 +3,13 @@
 </div>
 <div style="margin: 30px">
   <form (ngSubmit)="onSubmit()">
-    <label for="username" style="display: block">Username</label>
+    <label for="username" style="display: block">Username*</label>
     <input id="username" [(ngModel)]="user.name" name="name" type="text" placeholder="Enter username">
     <br>
 
     @if(!update) {
-      <label for="password" style="display: block">Password</label>
-      <input id="password" [(ngModel)]="user.passwordHash" name="passwordHash" type="text" placeholder="Enter password">
+      <label for="password" style="display: block">Password*</label>
+      <input id="password" [(ngModel)]="user.passwordHash" name="passwordHash" type="password" placeholder="Enter password">
       <br>
     }
 
@@ -17,8 +17,8 @@
     <input id="phone" [(ngModel)]="user.phone" name="phone" type="text" placeholder="Enter phone">
     <br>
 
-    <label for="email" style="display: block">Email</label>
-    <input id="email" [(ngModel)]="user.email" name="email" type="text" placeholder="Enter email">
+    <label for="email" style="display: block">Email*</label>
+    <input id="email" [(ngModel)]="user.email" name="email" type="email" placeholder="Enter email">
     <br>
 
     <button class="form-button" type="submit">{{update ? 'Update' : 'Create'}} user</button>

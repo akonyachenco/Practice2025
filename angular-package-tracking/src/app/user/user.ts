@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from './user.service';
-import { UserDto } from './user-dto';
+import { UserDto } from './user.dto';
 import { Router } from '@angular/router';
 import {FormsModule} from '@angular/forms';
 
@@ -33,15 +33,17 @@ export class User implements OnInit {
   }
 
   clickUpdateButton(user: UserDto): void {
-    this.service.getUserById(user.userID!).subscribe({
-      next: () => {
-        this.user = user;
-      },
-      error: (error) => {
-        console.error('Failed to find user', error);
-      }
-    })
+    this.user = user;
     this.update = true;
+    // this.service.getUserById(user.userID!).subscribe({
+    //   next: () => {
+    //     this.user = user;
+    //   },
+    //   error: (error) => {
+    //     console.error('Failed to find user', error);
+    //   }
+    // })
+    // this.update = true;
   }
 
   onSubmit() {
@@ -54,7 +56,11 @@ export class User implements OnInit {
         },
           error: (error) => {
             console.error('Failed to update user:', error);
-          }
+            this.service.getUserById(this.user.userID!).subscribe((user) => {
+              this.user = user;
+            });
+            this.ngOnInit();
+          },
       })
     } else {
       this.service.createUser(this.user).subscribe({

@@ -54,7 +54,7 @@ public class DeliveryController {
         return deliveryService.updateDelivery(deliveryDto);
     }
 
-    @DeleteMapping("delete/{pkgID}")
+    @DeleteMapping("delete/by-packageID/{pkgID}")
     public void deleteByPackageID(@PathVariable long pkgID) {
         log.info("Delete delivery by package id: {}", pkgID);
         deliveryService.deleteByPkg_PackageID(pkgID);

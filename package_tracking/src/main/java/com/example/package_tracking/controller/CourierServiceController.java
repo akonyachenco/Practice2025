@@ -61,7 +61,7 @@ public class CourierServiceController {
         return courierServiceService.updateCourierService(courierServiceDto);
     }
 
-    @DeleteMapping("delete/{email}")
+    @DeleteMapping("delete/by-email/{email}")
     public void deleteByEmail(@PathVariable String email) {
         log.info("Delete courier service by email: {}", email);
         courierServiceService.deleteByEmail(email);

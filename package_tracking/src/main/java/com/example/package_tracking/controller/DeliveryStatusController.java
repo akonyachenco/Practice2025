@@ -61,7 +61,7 @@ public class DeliveryStatusController {
     }
 
     @PutMapping("update")
-    public DeliveryStatusDto updateDeliveryStatus(DeliveryStatusDto deliveryStatusDto) {
+    public DeliveryStatusDto updateDeliveryStatus(@RequestBody DeliveryStatusDto deliveryStatusDto) {
         log.info("Update delivery status with id: {}", deliveryStatusDto.getDeliveryStatusID());
         return deliveryStatusService.updateDeliveryStatus(deliveryStatusDto);
     }
@@ -78,7 +78,7 @@ public class DeliveryStatusController {
         deliveryStatusService.deleteById(id);
     }
 
-    @DeleteMapping("delete/{tracking_number}")
+    @DeleteMapping("delete/by-tracking-number/{tracking_number}")
     public void deleteByPackageTrackingNumber(@PathVariable String tracking_number) {
         log.info("Delete delivery status by package tracking number: {}", tracking_number);
         deliveryStatusService.deleteByDeliveryPkgTrackingNumber(tracking_number);

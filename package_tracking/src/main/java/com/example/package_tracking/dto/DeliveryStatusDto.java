@@ -1,6 +1,7 @@
 package com.example.package_tracking.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -12,6 +13,6 @@ public class DeliveryStatusDto {
     private String status;
     private String location;
     private LocalDateTime statusDate;
-    @NotBlank
+    @NotNull
     private Long deliveryID;
 }
