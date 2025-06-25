@@ -1,5 +1,6 @@
 package com.example.package_tracking.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
@@ -12,7 +13,9 @@ public class DeliveryDto {
     @Positive
     private Integer cost;
     private LocalDateTime estimatedDeliveryDate;
+    @NotBlank
     private Long packageID;
+    @NotBlank
     private Long courierServiceID;
     private List<DeliveryStatusDto> statusHistory;
 }
