@@ -1,16 +1,13 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
-import {UserDto} from './user-dto';
-import {User} from './user';
-
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { UserDto } from './user-dto';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-
-  private apiUrl = "/api/users"
+  private apiUrl = "/api/users";
 
   constructor(private http: HttpClient) { }
 

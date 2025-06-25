@@ -1,25 +1,24 @@
-import {Component, OnInit} from '@angular/core';
-import {UserService} from './user.service';
-import {UserDto} from './user-dto';
+import { Component, OnInit } from '@angular/core';
+import { UserService } from './user.service';
+import { UserDto } from './user-dto';
+import { Router } from '@angular/router';
 import {FormsModule} from '@angular/forms';
-import {Router} from '@angular/router';
-
 
 @Component({
   selector: 'app-user',
-  imports: [
-    FormsModule,
-  ],
+  standalone: true,
   templateUrl: './user.html',
-  styleUrl: './user.scss'
+  imports: [
+    FormsModule
+  ],
+  styleUrls: ['./user.scss']
 })
-export class User implements OnInit{
+export class User implements OnInit {
   update: boolean = false;
   users: UserDto[] = [];
-  user: UserDto = {name:"", passwordHash:"", email:""};
+  user: UserDto = { name: "", passwordHash: "", email: "", phone: "" };
 
-  constructor(private service: UserService, private router: Router) {
-  }
+  constructor(private service: UserService) { }
 
   ngOnInit(): void {
     this.service.getAllUsers().subscribe({
@@ -27,21 +26,20 @@ export class User implements OnInit{
         this.users = users;
       },
       error: (error) => {
-        console.error('Failed to load users:', error)
+        console.error('Failed to load users:', error);
       }
-    })
+    });
   }
 
   onSubmit() {
-    if(this.update) {
+    if (this.update) {
 
-    }
-    else {
+    } else {
       this.service.createUser(this.user).subscribe(() => {
-        this.router.navigate(["/users"])
-      })
+        this.ngOnInit();
+        this.user = { name: "", passwordHash: "", email: "", phone: "" };
+      });
     }
   }
-
 
 }
