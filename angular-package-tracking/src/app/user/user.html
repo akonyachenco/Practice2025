@@ -1,12 +1,17 @@
+<div>
+  <h1>Users info</h1>
+</div>
 <div style="margin: 30px">
   <form (ngSubmit)="onSubmit()">
     <label for="username" style="display: block">Username</label>
     <input id="username" [(ngModel)]="user.name" name="name" type="text" placeholder="Enter username">
     <br>
 
-    <label for="password" style="display: block">Password</label>
-    <input id="password" [(ngModel)]="user.passwordHash" name="passwordHash" type="text" placeholder="Enter password">
-    <br>
+    @if(!update) {
+      <label for="password" style="display: block">Password</label>
+      <input id="password" [(ngModel)]="user.passwordHash" name="passwordHash" type="text" placeholder="Enter password">
+      <br>
+    }
 
     <label for="phone" style="display: block">Phone</label>
     <input id="phone" [(ngModel)]="user.phone" name="phone" type="text" placeholder="Enter phone">
@@ -16,7 +21,11 @@
     <input id="email" [(ngModel)]="user.email" name="email" type="text" placeholder="Enter email">
     <br>
 
-    <button type="submit">{{update ? 'Update' : 'Create'}} user</button>
+    <button class="form-button" type="submit">{{update ? 'Update' : 'Create'}} user</button>
+    @if(update) {
+      <br>
+      <button class="form-button" (click)="clickCancelButton()">Cancel</button>
+    }
   </form>
 </div>
 
@@ -28,6 +37,7 @@
       <th>Username</th>
       <th>Phone</th>
       <th>Email</th>
+      <th>Action</th>
     </tr>
     </thead>
     <tbody>
@@ -37,6 +47,11 @@
           <td>{{user.name}}</td>
           <td>{{user.phone}}</td>
           <td>{{user.email}}</td>
+          <td>
+            <button (click)="clickUpdateButton(user)">Update</button>
+            <span>  |  </span>
+            <button (click)="clickDeleteButton(user.userID!)">Delete</button>
+          </td>
         </tr>
       }
     </tbody>
