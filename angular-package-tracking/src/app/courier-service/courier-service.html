@@ -15,7 +15,7 @@
 
     <label for="email" style="display: block">Email</label>
     <input id="email" [(ngModel)]="courierService.email" name="email"
-           type="email" placeholder="Enter email">
+           type="email" placeholder="Enter email" email>
     <br>
 
     <label for="website" style="display: block">Website</label>
@@ -53,7 +53,7 @@
           <td>{{service.website}}</td>
           <td>
             <button (click)="clickUpdateButton(service)">Update</button>
-            <span> | </span>
+            <span>|  </span>
             <button (click)="clickDeleteButton(service.courierServiceID!)">Delete</button>
           </td>
         </tr>

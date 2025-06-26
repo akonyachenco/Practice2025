@@ -7,23 +7,43 @@
       <form (ngSubmit)="onSubmit()">
         <label for="username" style="display: block">Username*</label>
         <input id="username" [(ngModel)]="user.name" name="name" type="text"
-               placeholder="Enter username" required>
+               placeholder="Enter username" required #name="ngModel">
+        @if(name.invalid && (name.dirty || name.touched)) {
+          <div class="error-message">
+            <p>Username is required</p>
+          </div>
+        }
         <br>
 
         @if(!update) {
           <label for="password" style="display: block">Password*</label>
           <input id="password" [(ngModel)]="user.passwordHash" name="passwordHash" type="password"
-                 placeholder="Enter password" required>
+                 placeholder="Enter password" required #password="ngModel">
+
+          @if(password.invalid && (password.dirty || password.touched)) {
+            <div class="error-message">
+              <p>Password is required</p>
+            </div>
+          }
           <br>
         }
-
         <label for="phone" style="display: block">Phone</label>
         <input id="phone" [(ngModel)]="user.phone" name="phone" type="text" placeholder="Enter phone">
         <br>
 
         <label for="email" style="display: block">Email*</label>
         <input id="email" [(ngModel)]="user.email" name="email" type="email"
-               placeholder="Enter email" required>
+               placeholder="Enter email" required email #email="ngModel">
+        @if(email.invalid && (email.dirty || email.touched)) {
+          <div class="error-message">
+            @if(email.errors?.['required']) {
+              <p>Email is required</p>
+            }
+            @if(email.errors?.['email']) {
+              <p>Please enter a valid email address</p>
+            }
+          </div>
+        }
         <br>
 
         <button class="form-button" type="submit">{{update ? 'Update' : 'Create'}} user</button>

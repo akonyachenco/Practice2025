@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from './user.service';
 import { UserDto } from './user.dto';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, Validators} from '@angular/forms';
 import {PackageService} from '../package/package.service';
 
 
@@ -85,14 +85,16 @@ export class User implements OnInit {
   }
 
   clickDeleteButton(id: number): void {
-    this.service.deleteUserByID(id).subscribe({
-      next: () => {
-        this.ngOnInit();
-      },
-      error: (error)=>  {
-        console.error('Failed to delete user', error())
+    if (confirm('Are you sure you want to delete this user?')) {
+      this.service.deleteUserByID(id).subscribe({
+        next: () => {
+          this.ngOnInit();
+        },
+        error: (error)=>  {
+          console.error('Failed to delete user', error())
+        }
+      });
     }
-    });
   }
 
   clickShowListButton(id: number): void {

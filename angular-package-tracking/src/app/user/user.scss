@@ -100,3 +100,18 @@ tr:hover {
 td, th{
   text-align: center;
 }
+
+.error-message {
+  color: red;
+  font-size: 0.8em;
+  margin-top: 0.2em;
+}
+
+input.ng-invalid.ng-touched {
+  border: 1px solid red;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

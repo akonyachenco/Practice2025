@@ -5,7 +5,7 @@
   <form (ngSubmit)="onSubmit()">
     <label for="cost" style="display: block">Cost (rub.)</label>
     <input id="cost" [(ngModel)]="delivery.cost" name="cost"
-           type="number" placeholder="Enter cost">
+           type="number" placeholder="Enter cost" >
     <br>
 
     <label for="estimatedDeliveryDate" style="display: block">Estimated Delivery Date</label>
@@ -53,7 +53,7 @@
           <td>{{delivery.courierServiceID}}</td>
           <td>
             <button (click)="clickUpdateButton(delivery)">Update</button>
-            <span> | </span>
+            <span>|    </span>
             <button (click)="clickDeleteButton(delivery.deliveryID!)">Delete</button>
           </td>
         </tr>

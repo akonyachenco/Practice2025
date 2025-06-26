@@ -84,13 +84,15 @@ export class CourierService implements OnInit {
   }
 
   clickDeleteButton(id: number): void {
-    this.service.deleteCourierServiceByID(id).subscribe({
-      next: () => {
-        this.ngOnInit();
-      },
-      error: (error) => {
-        console.error('Failed to delete courier service', error);
-      }
-    });
+    if (confirm('Are you sure you want to delete this delivery?')) {
+      this.service.deleteCourierServiceByID(id).subscribe({
+        next: () => {
+          this.ngOnInit();
+        },
+        error: (error) => {
+          console.error('Failed to delete courier service', error);
+        }
+      });
+    }
   }
 }

@@ -85,13 +85,15 @@ export class Delivery implements OnInit {
   }
 
   clickDeleteButton(id: number): void {
-    this.service.deleteDeliveryByID(id).subscribe({
-      next: () => {
-        this.ngOnInit();
-      },
-      error: (error) => {
-        console.error('Failed to delete delivery', error);
-      }
-    });
+    if (confirm('Are you sure you want to delete this delivery?')) {
+      this.service.deleteDeliveryByID(id).subscribe({
+        next: () => {
+          this.ngOnInit();
+        },
+        error: (error) => {
+          console.error('Failed to delete delivery', error);
+        }
+      });
+    }
   }
 }
