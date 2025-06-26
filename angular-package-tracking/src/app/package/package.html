@@ -1,71 +1,98 @@
 <div>
-  <h1>Packages Info</h1>
-</div>
-<div style="margin: 30px">
-  <form (ngSubmit)="onSubmit()">
-    <label for="trackingNumber" style="display: block">Tracking Number*</label>
-    <input id="trackingNumber" [(ngModel)]="pkg.trackingNumber" name="trackingNumber"
-           type="text" placeholder="Enter tracking number" required>
-    <br>
-
-    <label for="userID" style="display: block">User ID*</label>
-    <input id="userID" [(ngModel)]="pkg.userID" name="userID"
-           type="number" placeholder="Enter user ID" required>
-    <br>
-
-    <label for="weight" style="display: block">Weight (kg)</label>
-    <input id="weight" [(ngModel)]="pkg.weight"
-           name="weight"
-           type="number" step="0.1" placeholder="Enter weight in kg">
-    <br>
-
-    <label for="dimensions" style="display: block">Dimensions</label>
-    <input id="dimensions" [(ngModel)]="pkg.dimensions" name="dimensions"
-           type="text" placeholder="Enter dimensions">
-    <br>
-
-    <label for="description" style="display: block">Description</label>
-    <textarea id="description" [(ngModel)]="pkg.description" name="description"
-              placeholder="Enter package description"></textarea>
-    <br>
-
-    <button class="form-button" type="submit">{{update ? 'Update' : 'Create'}} package</button>
-    @if(update) {
-      <br>
-      <button class="form-button" type="button" (click)="clickCancelButton()">Cancel</button>
+  <div>
+    <h1>Packages Info</h1>
+  </div>
+  <div style="margin: 30px">
+    @if(errorMessage) {
+      <div class = "alert-message error with-icon">
+        <p>{{errorMessage}}</p>
+      </div>
     }
-  </form>
-</div>
-
-<div>
-  <table>
-    <thead>
-    <tr>
-      <th>ID</th>
-      <th>Tracking Number</th>
-      <th>User ID</th>
-      <th>Weight</th>
-      <th>Dimensions</th>
-      <th>Description</th>
-      <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-      @for (pkg of packages; track pkg.packageID) {
-        <tr>
-          <td>{{pkg.packageID}}</td>
-          <td>{{pkg.trackingNumber}}</td>
-          <td>{{pkg.userID}}</td>
-          <td>{{pkg.weight}} kg</td>
-          <td>{{pkg.dimensions}}</td>
-          <td>{{pkg.description}}</td>
-          <td>
-            <button (click)="clickUpdateButton(pkg)">Update</button>
-            <span>|  </span>
-            <button (click)="clickDeleteButton(pkg.packageID!)">Delete</button>
-          </td>
-        </tr>
+    <form (ngSubmit)="onSubmit()" #packageForm="ngForm" (submit)="packageForm.reset()">
+      <label for="trackingNumber" style="display: block">Tracking Number*</label>
+      <input id="trackingNumber" [(ngModel)]="pkg.trackingNumber" name="trackingNumber"
+             type="text" placeholder="Enter tracking number" required #trackingNumber="ngModel">
+      @if(trackingNumber.invalid && (trackingNumber.dirty || trackingNumber.touched)) {
+        <div class="alert-message error with-icon">
+          <p>Tracking number is required</p>
+        </div>
       }
-    </tbody>
-  </table>
+      <br>
+
+      <label for="userID" style="display: block">User ID*</label>
+      <input id="userID" [(ngModel)]="pkg.userID" name="userID"
+             type="number" placeholder="Enter user ID" required #userID="ngModel">
+      @if(userID.invalid && (userID.dirty || userID.touched)) {
+        <div class="alert-message error with-icon">
+          <p>User ID is required</p>
+        </div>
+      }
+      <br>
+
+      <label for="weight" style="display: block">Weight (kg)</label>
+      <input id="weight" [(ngModel)]="pkg.weight"
+             name="weight"
+             type="number" step="0.1" placeholder="Enter weight in kg">
+      <br>
+
+      <label for="dimensions" style="display: block">Dimensions</label>
+      <input id="dimensions" [(ngModel)]="pkg.dimensions" name="dimensions"
+             type="text" placeholder="Enter dimensions">
+      <br>
+
+      <label for="description" style="display: block">Description</label>
+      <textarea id="description" [(ngModel)]="pkg.description" name="description"
+                placeholder="Enter package description"></textarea>
+      <br>
+
+      <button class="form-button" type="submit" [disabled]="!packageForm.form.valid">
+        {{update ? 'Update' : 'Create'}} package
+      </button>
+      @if(update) {
+        <br>
+        <button class="form-button" type="button"
+                (click)="clickCancelButton(); packageForm.reset()">Cancel</button>
+      }
+    </form>
+  </div>
+
+  <div>
+    <form>
+      <label for="findID">Find Package by ID: </label>
+      <input id="findID" [(ngModel)]="findID" name="findID"
+             type="number" placeholder="ID for searching">
+      <button (click)="clickFindByIDButton(findID!)">Search</button>
+      <button (click)="clickCancelFindButton()">Clear</button>
+    </form>
+    <table>
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Tracking Number</th>
+        <th>User ID</th>
+        <th>Weight</th>
+        <th>Dimensions</th>
+        <th>Description</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+        @for (pkg of packages; track pkg.packageID) {
+          <tr>
+            <td>{{pkg.packageID}}</td>
+            <td>{{pkg.trackingNumber}}</td>
+            <td>{{pkg.userID}}</td>
+            <td>{{pkg.weight}} kg</td>
+            <td>{{pkg.dimensions}}</td>
+            <td>{{pkg.description}}</td>
+            <td>
+              <button (click)="clickUpdateButton(pkg)">Update</button>
+              <span>|  </span>
+              <button (click)="clickDeleteButton(pkg.packageID!)">Delete</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
 </div>

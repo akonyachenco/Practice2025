@@ -1,63 +1,105 @@
 <div>
-  <h1>Courier Services Info</h1>
-</div>
-<div style="margin: 30px">
-  <form (ngSubmit)="onSubmit()">
-    <label for="name" style="display: block">Name*</label>
-    <input id="name" [(ngModel)]="courierService.name" name="name"
-           type="text" placeholder="Enter name" required>
-    <br>
-
-    <label for="phone" style="display: block">Phone*</label>
-    <input id="phone" [(ngModel)]="courierService.phone" name="phone"
-           type="text" placeholder="Enter phone" required>
-    <br>
-
-    <label for="email" style="display: block">Email</label>
-    <input id="email" [(ngModel)]="courierService.email" name="email"
-           type="email" placeholder="Enter email" email>
-    <br>
-
-    <label for="website" style="display: block">Website</label>
-    <input id="website" [(ngModel)]="courierService.website" name="website"
-           type="url" placeholder="Enter website URL">
-    <br>
-
-    <button class="form-button" type="submit">{{update ? 'Update' : 'Create'}} service</button>
-    @if(update) {
-      <br>
-      <button class="form-button" (click)="clickCancelButton()">Cancel</button>
+  <div>
+    <h1>Courier Services Info</h1>
+  </div>
+  <div style="margin: 30px">
+    @if(errorMessage) {
+      <div class = "alert-message error with-icon">
+        <p>{{errorMessage}}</p>
+      </div>
     }
-  </form>
-</div>
-
-<div>
-  <table>
-    <thead>
-    <tr>
-      <th>ID</th>
-      <th>Name</th>
-      <th>Phone</th>
-      <th>Email</th>
-      <th>Website</th>
-      <th>Action</th>
-    </tr>
-    </thead>
-    <tbody>
-      @for (service of courierServices; track service.courierServiceID) {
-        <tr>
-          <td>{{service.courierServiceID}}</td>
-          <td>{{service.name}}</td>
-          <td>{{service.phone}}</td>
-          <td>{{service.email}}</td>
-          <td>{{service.website}}</td>
-          <td>
-            <button (click)="clickUpdateButton(service)">Update</button>
-            <span>|  </span>
-            <button (click)="clickDeleteButton(service.courierServiceID!)">Delete</button>
-          </td>
-        </tr>
+    <form (ngSubmit)="onSubmit()" #serviceForm="ngForm" (submit)="serviceForm.reset()">
+      <label for="name" style="display: block">Name*</label>
+      <input id="name" [(ngModel)]="courierService.name" name="name"
+             type="text" placeholder="Enter name" required #name="ngModel">
+      @if(name.invalid && (name.dirty || name.touched)) {
+        <div class="alert-message error with-icon">
+          <p>Name is required</p>
+        </div>
       }
-    </tbody>
-  </table>
+      <br>
+
+      <label for="phone" style="display: block">Phone*</label>
+      <input id="phone" [(ngModel)]="courierService.phone" name="phone"
+             type="text" placeholder="Enter phone" required #phone="ngModel">
+      @if(phone.invalid && (phone.dirty || phone.touched)) {
+        <div class="alert-message error with-icon">
+          <p>Phone is required</p>
+        </div>
+      }
+      <br>
+
+      <label for="email" style="display: block">Email</label>
+      <input email id="email" [(ngModel)]="courierService.email" name="email"
+             type="email" placeholder="Enter email"  #email="ngModel">
+      @if(email.invalid && (email.dirty || email.touched)) {
+        <div class="alert-message error with-icon">
+          <p>Please enter a valid email address</p>
+        </div>
+      }
+      <br>
+
+      <label for="website" style="display: block">Website</label>
+      <input id="website" [(ngModel)]="courierService.website" name="website"
+             type="url" placeholder="Enter website URL"  #website="ngModel"
+             pattern = 'https?:\/\/\S+\.\S+'>
+      @if(website.invalid && (website.dirty || website.touched)) {
+        <div class="alert-message error with-icon">
+          <p>Please enter a valid URL</p>
+        </div>
+      }
+      <br>
+
+      <button class="form-button" type="submit" [disabled]="!serviceForm.form.valid">
+        {{update ? 'Update' : 'Create'}} service
+      </button>
+      @if(update) {
+        <br>
+        <button class="form-button" type="button"
+                (click)="clickCancelButton(); serviceForm.reset()">Cancel</button>
+      }
+    </form>
+  </div>
+
+  <div>
+    <form>
+      <label for="findID">Find Service by ID: </label>
+      <input id="findID" [(ngModel)]="findID" name="findID"
+             type="number" placeholder="ID for searching">
+      <button (click)="clickFindByIDButton(findID!)">Search</button>
+      <button (click)="clickCancelFindButton()">Clear</button>
+    </form>
+    <table>
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Phone</th>
+        <th>Email</th>
+        <th>Website</th>
+        <th>Action</th>
+      </tr>
+      </thead>
+      <tbody>
+        @for (service of courierServices; track service.courierServiceID) {
+          <tr>
+            <td>{{service.courierServiceID}}</td>
+            <td>{{service.name}}</td>
+            <td>{{service.phone}}</td>
+            <td>{{service.email}}</td>
+            <td>
+              @if(service.website) {
+                <a [href]="service.website" target="_blank">{{service.website}}</a>
+              }
+            </td>
+            <td>
+              <button (click)="clickUpdateButton(service)">Update</button>
+              <span>|  </span>
+              <button (click)="clickDeleteButton(service.courierServiceID!)">Delete</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
 </div>

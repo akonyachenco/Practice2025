@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DeliveryStatusService } from './delivery-status.service';
 import { DeliveryStatusDto } from './delivery-status.dto';
 import { FormsModule } from '@angular/forms';
+import {DeliveryService} from '../delivery/delivery.service';
 
 @Component({
   selector: 'app-delivery-status',
@@ -13,50 +14,66 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./delivery-status.scss']
 })
 export class DeliveryStatus implements OnInit {
+  errorMessage: string | null = null;
+  findID: number | undefined = undefined;
   update: boolean = false;
   statuses: DeliveryStatusDto[] = [];
   status: DeliveryStatusDto = {
-    status: '',
-    deliveryID: 0,
-    location: undefined,
-    statusDate: undefined
+    status: "",
+    deliveryID: 0
   };
 
-  constructor(private service: DeliveryStatusService) { }
+  constructor(private service: DeliveryStatusService, private deliveryService: DeliveryService) { }
 
   ngOnInit(): void {
-    this.service.getAllDeliveryStatuses().subscribe({
-      next: (statuses) => {
-        this.statuses = statuses;
-      },
-      error: (error) => {
-        console.error('Failed to load delivery statuses:', error);
-      }
-    });
+    if(this.findID != undefined) {
+      this.clickFindByIDButton(this.findID);
+    } else {
+      this.service.getAllDeliveryStatuses().subscribe({
+        next: (statuses) => {
+          this.statuses = statuses;
+        },
+        error: (error) => {
+          console.error('Failed to load delivery statuses:', error);
+        }
+      });
+    }
   }
 
-
   clickUpdateButton(status: DeliveryStatusDto): void {
-    this.status = status;
+    this.errorMessage = null;
+    window.scrollTo(0, 0);
+    this.status = { ...status };
     this.update = true;
   }
 
   onSubmit() {
+    this.errorMessage = null;
     if (this.update) {
+      this.deliveryService.getDeliveryById(this.status.deliveryID).subscribe({
+        error: (error) => {
+          console.error('Failed to update delivery status:', error);
+          this.errorMessage = error.error.message;
+          this.service.getDeliveryStatusById(this.status.deliveryStatusID!).subscribe((status) => {
+            this.status = status;
+          });
+          this.ngOnInit();
+        }
+      })
+
       this.service.updateDeliveryStatus(this.status).subscribe({
         next: () => {
           this.update = false;
           this.clearForm();
           this.ngOnInit();
         },
-        error: (error) => {
-          console.error('Failed to update delivery status:', error);
+        error: () => {
           this.service.getDeliveryStatusById(this.status.deliveryStatusID!).subscribe((status) => {
             this.status = status;
           });
           this.ngOnInit();
         }
-      });
+      })
     } else {
       this.service.createDeliveryStatus(this.status).subscribe({
         next: () => {
@@ -65,6 +82,7 @@ export class DeliveryStatus implements OnInit {
         },
         error: (error) => {
           console.error('Failed to create delivery status:', error);
+          this.errorMessage = error.error.message;
         }
       });
     }
@@ -72,14 +90,13 @@ export class DeliveryStatus implements OnInit {
 
   clearForm(): void {
     this.status = {
-      status: '',
-      deliveryID: 0,
-      location: undefined,
-      statusDate: undefined
+      status: "",
+      deliveryID: 0
     };
   }
 
   clickCancelButton(): void {
+    this.errorMessage = null;
     this.clearForm();
     this.update = false;
   }
@@ -91,9 +108,20 @@ export class DeliveryStatus implements OnInit {
           this.ngOnInit();
         },
         error: (error) => {
-          console.error('Failed to delete delivery status', error);
+          console.error('Failed to delete delivery status', error)
         }
       });
     }
+  }
+
+  clickFindByIDButton(findID: number): void {
+    this.service.getDeliveryStatusById(findID).subscribe((status) => {
+      this.statuses = [status];
+    })
+  }
+
+  clickCancelFindButton(): void {
+    this.findID = undefined;
+    this.ngOnInit();
   }
 }

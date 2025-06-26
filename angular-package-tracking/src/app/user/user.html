@@ -4,12 +4,17 @@
       <h1>Users info</h1>
     </div>
     <div>
-      <form (ngSubmit)="onSubmit()">
+      @if(errorMessage) {
+        <div class = "alert-message error with-icon">
+          <p>{{errorMessage}}</p>
+        </div>
+      }
+      <form (ngSubmit)="onSubmit()" #userForm="ngForm" (submit)="userForm.reset()">
         <label for="username" style="display: block">Username*</label>
         <input id="username" [(ngModel)]="user.name" name="name" type="text"
                placeholder="Enter username" required #name="ngModel">
         @if(name.invalid && (name.dirty || name.touched)) {
-          <div class="error-message">
+          <div class="alert-message error with-icon">
             <p>Username is required</p>
           </div>
         }
@@ -21,7 +26,7 @@
                  placeholder="Enter password" required #password="ngModel">
 
           @if(password.invalid && (password.dirty || password.touched)) {
-            <div class="error-message">
+            <div class="alert-message error with-icon">
               <p>Password is required</p>
             </div>
           }
@@ -35,7 +40,7 @@
         <input id="email" [(ngModel)]="user.email" name="email" type="email"
                placeholder="Enter email" required email #email="ngModel">
         @if(email.invalid && (email.dirty || email.touched)) {
-          <div class="error-message">
+          <div class="alert-message error with-icon">
             @if(email.errors?.['required']) {
               <p>Email is required</p>
             }
@@ -46,10 +51,11 @@
         }
         <br>
 
-        <button class="form-button" type="submit">{{update ? 'Update' : 'Create'}} user</button>
+        <button class="form-button" type="submit" [disabled]="userForm.form.invalid"
+        >{{update ? 'Update' : 'Create'}} user</button>
         @if(update) {
           <br>
-          <button class="form-button" (click)="clickCancelButton()">Cancel</button>
+          <button class="form-button" (click)="clickCancelButton(); userForm.reset()">Cancel</button>
         }
       </form>
     </div>
@@ -127,7 +133,7 @@
           }
         </tbody>
       </table>
-      <button class="form-button" (click)="clickHideListButton()">Cancel</button>
+      <button class="form-button" (click)="clickHideListButton()">Back</button>
     </div>
   </div>
 }

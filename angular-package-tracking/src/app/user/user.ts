@@ -16,6 +16,7 @@ import {PackageService} from '../package/package.service';
   styleUrls: ['./user.scss']
 })
 export class User implements OnInit {
+  errorMessage: string | null = null;
   findID: number | undefined = undefined;
   showList: boolean = false;
   update: boolean = false;
@@ -41,12 +42,14 @@ export class User implements OnInit {
   }
 
   clickUpdateButton(user: UserDto): void {
+    this.errorMessage = null;
     window.scrollTo(0, 0);
     this.user = user;
     this.update = true;
   }
 
   onSubmit() {
+    this.errorMessage = null;
     if (this.update) {
       this.service.updateUser(this.user).subscribe({
         next: () => {
@@ -56,6 +59,7 @@ export class User implements OnInit {
         },
           error: (error) => {
             console.error('Failed to update user:', error);
+            this.errorMessage = error.error.message;
             this.service.getUserById(this.user.userID!).subscribe((user) => {
               this.user = user;
             });
@@ -70,6 +74,7 @@ export class User implements OnInit {
         },
         error: (error) => {
           console.error('Failed to create user:', error);
+          this.errorMessage = error.error.message;
         }
       });
     }
@@ -80,6 +85,7 @@ export class User implements OnInit {
   }
 
   clickCancelButton(): void {
+    this.errorMessage = null;
     this.clearForm();
     this.update = false;
   }
@@ -103,6 +109,7 @@ export class User implements OnInit {
       this.service.getUserById(id).subscribe((user) => {
         this.user = user;
       })
+      this.errorMessage = null;
       this.showList = true;
       this.update = false;
     })

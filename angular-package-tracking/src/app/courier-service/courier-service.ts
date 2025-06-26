@@ -13,34 +13,41 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./courier-service.scss']
 })
 export class CourierService implements OnInit {
+  errorMessage: string | null = null;
+  findID: number | undefined = undefined;
   update: boolean = false;
   courierServices: CourierServiceDto[] = [];
   courierService: CourierServiceDto = {
     name: "",
-    phone: "",
-    email: undefined,
-    website: undefined
+    phone: ""
   };
 
   constructor(private service: CourierServiceService) { }
 
   ngOnInit(): void {
-    this.service.getAllCourierServices().subscribe({
-      next: (services) => {
-        this.courierServices = services;
-      },
-      error: (error) => {
-        console.error('Failed to load courier services:', error);
-      }
-    });
+    if(this.findID != undefined) {
+      this.clickFindByIDButton(this.findID);
+    } else {
+      this.service.getAllCourierServices().subscribe({
+        next: (services) => {
+          this.courierServices = services;
+        },
+        error: (error) => {
+          console.error('Failed to load courier services:', error);
+        }
+      });
+    }
   }
 
   clickUpdateButton(service: CourierServiceDto): void {
-    this.courierService = service;
+    this.errorMessage = null;
+    window.scrollTo(0, 0);
+    this.courierService = { ...service };
     this.update = true;
   }
 
   onSubmit() {
+    this.errorMessage = null;
     if (this.update) {
       this.service.updateCourierService(this.courierService).subscribe({
         next: () => {
@@ -50,12 +57,13 @@ export class CourierService implements OnInit {
         },
         error: (error) => {
           console.error('Failed to update courier service:', error);
-          this.service.getCourierServiceById(this.courierService.courierServiceID!).subscribe((courierService) => {
-            this.courierService = courierService;
+          this.errorMessage = error.error.message;
+          this.service.getCourierServiceById(this.courierService.courierServiceID!).subscribe((service) => {
+            this.courierService = service;
           });
           this.ngOnInit();
-        }
-      });
+        },
+      })
     } else {
       this.service.createCourierService(this.courierService).subscribe({
         next: () => {
@@ -72,27 +80,37 @@ export class CourierService implements OnInit {
   clearForm(): void {
     this.courierService = {
       name: "",
-      phone: "",
-      email: undefined,
-      website: undefined
+      phone: ""
     };
   }
 
   clickCancelButton(): void {
+    this.errorMessage = null;
     this.clearForm();
     this.update = false;
   }
 
   clickDeleteButton(id: number): void {
-    if (confirm('Are you sure you want to delete this delivery?')) {
+    if (confirm('Are you sure you want to delete this courier service?')) {
       this.service.deleteCourierServiceByID(id).subscribe({
         next: () => {
           this.ngOnInit();
         },
         error: (error) => {
-          console.error('Failed to delete courier service', error);
+          console.error('Failed to delete courier service', error)
         }
       });
     }
+  }
+
+  clickFindByIDButton(findID: number): void {
+    this.service.getCourierServiceById(findID).subscribe((service) => {
+      this.courierServices = [service];
+    })
+  }
+
+  clickCancelFindButton(): void {
+    this.findID = undefined;
+    this.ngOnInit();
   }
 }

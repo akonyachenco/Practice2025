@@ -1,85 +1,97 @@
 import { Component, OnInit } from '@angular/core';
 import { PackageService } from './package.service';
 import { PackageDto } from './package.dto';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, Validators, FormControl, FormGroup } from '@angular/forms';
+import {UserService} from '../user/user.service';
 
 @Component({
   selector: 'app-package',
   standalone: true,
   templateUrl: './package.html',
-  imports: [FormsModule],
+  imports: [
+    FormsModule
+  ],
   styleUrls: ['./package.scss']
 })
 export class Package implements OnInit {
+  errorMessage: string | null = null;
+  findID: number | undefined = undefined;
   update: boolean = false;
   packages: PackageDto[] = [];
   pkg: PackageDto = {
-    trackingNumber: '',
+    trackingNumber: "",
     userID: 0,
     weight: undefined,
-    dimensions: undefined,
-    description: undefined
+    dimensions: "",
+    description: ""
   };
 
-  constructor(private service: PackageService) { }
+  constructor(private service: PackageService, private userService: UserService) { }
 
   ngOnInit(): void {
-    this.service.getAllPackages().subscribe({
-      next: (packages) => {
-        this.packages = packages;
-      },
-      error: (error) => {
-        console.error('Failed to load packages:', error);
-      }
-    });
+    if(this.findID != undefined) {
+      this.clickFindByIDButton(this.findID);
+    } else {
+      this.service.getAllPackages().subscribe({
+        next: (packages) => {
+          this.packages = packages;
+        },
+        error: (error) => {
+          console.error('Failed to load packages:', error);
+        }
+      });
+    }
   }
 
-
   clickUpdateButton(pkg: PackageDto): void {
-    this.pkg = pkg;
+    this.errorMessage = null;
+    window.scrollTo(0, 0);
+    this.pkg = { ...pkg };
     this.update = true;
   }
 
   onSubmit() {
+    this.errorMessage = null;
     if (this.update) {
+      this.userService.getUserById(this.pkg.userID).subscribe({
+        error: (error) => {
+          console.error('Failed to update package:', error);
+          this.errorMessage = error.error.message;
+          this.service.getPackageById(this.pkg.packageID!).subscribe((pkg) => {
+            this.pkg = pkg;
+          });
+          this.ngOnInit();
+        }
+      })
+
       this.service.updatePackage(this.pkg).subscribe({
         next: () => {
           this.update = false;
           this.clearForm();
           this.ngOnInit();
         },
-        error: (error) => {
-          console.error('Failed to update package:', error);
+        error: () => {
           this.service.getPackageById(this.pkg.packageID!).subscribe((pkg) => {
             this.pkg = pkg;
           });
           this.ngOnInit();
-        }
-      });
-    } else {
-      this.service.createPackage(this.pkg).subscribe({
-        next: () => {
-          this.ngOnInit();
-          this.clearForm();
         },
-        error: (error) => {
-          console.error('Failed to create package:', error);
-        }
-      });
+      })
     }
   }
 
   clearForm(): void {
     this.pkg = {
-      trackingNumber: '',
+      trackingNumber: "",
       userID: 0,
       weight: undefined,
-      dimensions: undefined,
-      description: undefined
+      dimensions: "",
+      description: ""
     };
   }
 
   clickCancelButton(): void {
+    this.errorMessage = null;
     this.clearForm();
     this.update = false;
   }
@@ -91,9 +103,20 @@ export class Package implements OnInit {
           this.ngOnInit();
         },
         error: (error) => {
-          console.error('Failed to delete package', error);
+          console.error('Failed to delete package', error)
         }
       });
     }
+  }
+
+  clickFindByIDButton(findID: number): void {
+    this.service.getPackageById(findID).subscribe((pkg) => {
+      this.packages = [pkg];
+    })
+  }
+
+  clickCancelFindButton(): void {
+    this.findID = undefined;
+    this.ngOnInit();
   }
 }

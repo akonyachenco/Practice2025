@@ -15,6 +15,7 @@ public class CourierServiceDto {
     @NotBlank
     private String phone;
     @Email
+
     private String email;
     @URL
     private String website;

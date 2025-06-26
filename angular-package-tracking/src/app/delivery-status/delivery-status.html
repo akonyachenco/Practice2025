@@ -1,63 +1,90 @@
 <div>
-  <h1>Delivery Statuses Info</h1>
-</div>
-<div style="margin: 30px">
-  <form (ngSubmit)="onSubmit()">
-    <label for="status" style="display: block">Status*</label>
-    <input id="status" [(ngModel)]="status.status" name="status"
-           type="text" placeholder="Enter status" required>
-    <br>
-
-    <label for="location" style="display: block">Location</label>
-    <input id="location" [(ngModel)]="status.location" name="location"
-           type="text" placeholder="Enter location">
-    <br>
-
-    <label for="statusDate" style="display: block">Status Date</label>
-    <input id="statusDate" [(ngModel)]="status.statusDate" name="statusDate"
-           type="datetime-local">
-    <br>
-
-    <label for="deliveryID" style="display: block">Delivery ID*</label>
-    <input id="deliveryID" [(ngModel)]="status.deliveryID" name="deliveryID"
-           type="number" placeholder="Enter delivery ID" required>
-    <br>
-
-    <button class="form-button" type="submit">{{update ? 'Update' : 'Create'}} status</button>
-    @if(update) {
-      <br>
-      <button class="form-button" (click)="clickCancelButton()">Cancel</button>
+  <div>
+    <h1>Delivery Statuses Info</h1>
+  </div>
+  <div style="margin: 30px">
+    @if(errorMessage) {
+      <div class = "alert-message error with-icon">
+        <p>{{errorMessage}}</p>
+      </div>
     }
-  </form>
-</div>
-
-<div>
-  <table>
-    <thead>
-    <tr>
-      <th>ID</th>
-      <th>Status</th>
-      <th>Location</th>
-      <th>Status Date</th>
-      <th>Delivery ID</th>
-      <th>Action</th>
-    </tr>
-    </thead>
-    <tbody>
-      @for (status of statuses; track status.deliveryStatusID) {
-        <tr>
-          <td>{{status.deliveryStatusID}}</td>
-          <td>{{status.status}}</td>
-          <td>{{status.location}}</td>
-          <td>{{status.statusDate}}</td>
-          <td>{{status.deliveryID}}</td>
-          <td>
-            <button (click)="clickUpdateButton(status)">Update</button>
-            <span>|  </span>
-            <button (click)="clickDeleteButton(status.deliveryStatusID!)">Delete</button>
-          </td>
-        </tr>
+    <form (ngSubmit)="onSubmit()" #statusForm="ngForm" (submit)="statusForm.reset()">
+      <label for="status" style="display: block">Status*</label>
+      <input id="status" [(ngModel)]="status.status" name="status"
+             type="text" placeholder="Enter status" required #statusInput="ngModel">
+      @if(statusInput.invalid && (statusInput.dirty || statusInput.touched)) {
+        <div class="alert-message error with-icon">
+          <p>Status is required</p>
+        </div>
       }
-    </tbody>
-  </table>
+      <br>
+
+      <label for="location" style="display: block">Location</label>
+      <input id="location" [(ngModel)]="status.location" name="location"
+             type="text" placeholder="Enter location">
+      <br>
+
+      <label for="statusDate" style="display: block">Status Date</label>
+      <input id="statusDate" [(ngModel)]="status.statusDate" name="statusDate"
+             type="datetime-local">
+      <br>
+
+      <label for="deliveryID" style="display: block">Delivery ID*</label>
+      <input id="deliveryID" [(ngModel)]="status.deliveryID" name="deliveryID"
+             type="number" placeholder="Enter delivery ID" required #deliveryID="ngModel">
+      @if(deliveryID.invalid && (deliveryID.dirty || deliveryID.touched)) {
+        <div class="alert-message error with-icon">
+          <p>Delivery ID is required</p>
+        </div>
+      }
+      <br>
+
+      <button class="form-button" type="submit" [disabled]="!statusForm.form.valid">
+        {{update ? 'Update' : 'Create'}} status
+      </button>
+      @if(update) {
+        <br>
+        <button class="form-button" type="button"
+                (click)="clickCancelButton(); statusForm.reset()">Cancel</button>
+      }
+    </form>
+  </div>
+
+  <div>
+    <form>
+      <label for="findID">Find Status by ID: </label>
+      <input id="findID" [(ngModel)]="findID" name="findID"
+             type="number" placeholder="ID for searching">
+      <button (click)="clickFindByIDButton(findID!)">Search</button>
+      <button (click)="clickCancelFindButton()">Clear</button>
+    </form>
+    <table>
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Status</th>
+        <th>Location</th>
+        <th>Status Date</th>
+        <th>Delivery ID</th>
+        <th>Action</th>
+      </tr>
+      </thead>
+      <tbody>
+        @for (status of statuses; track status.deliveryStatusID) {
+          <tr>
+            <td>{{status.deliveryStatusID}}</td>
+            <td>{{status.status}}</td>
+            <td>{{status.location}}</td>
+            <td>{{status.statusDate}}</td>
+            <td>{{status.deliveryID}}</td>
+            <td>
+              <button (click)="clickUpdateButton(status)">Update</button>
+              <span>|  </span>
+              <button (click)="clickDeleteButton(status.deliveryStatusID!)">Delete</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
 </div>

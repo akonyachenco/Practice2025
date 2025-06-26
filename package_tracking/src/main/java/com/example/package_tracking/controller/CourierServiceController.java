@@ -25,7 +25,7 @@ public class CourierServiceController {
         return courierServiceService.findAll();
     }
 
-    @PostMapping("/{id}")
+    @GetMapping("/{id}")
     public CourierServiceDto findById(@PathVariable Long id) {
         log.info("Find courier service by id: {}", id);
         return courierServiceService.findById(id);
