@@ -1,6 +1,7 @@
 package com.example.package_tracking.controller;
 
 import com.example.package_tracking.dto.UserDto;
+import com.example.package_tracking.dto.UserWithPasswordDto;
 import com.example.package_tracking.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -37,7 +38,7 @@ public class UserController {
     }
 
     @PostMapping("create")
-    public UserDto createUser(@RequestBody @Valid UserDto userDto) {
+    public UserDto createUser(@RequestBody @Valid UserWithPasswordDto userDto) {
         log.info("Create user: {}", userDto.getEmail());
         return userService.createUser(userDto);
     }
@@ -48,11 +49,11 @@ public class UserController {
         return userService.updateUser(userDto);
     }
 
-    @DeleteMapping("delete")
-    public void deleteUser(@RequestBody @Valid UserDto userDto) {
-        log.info("Delete user with id: {}", userDto.getUserID());
-        userService.deleteUser(userDto);
-    }
+//    @DeleteMapping("delete")
+//    public void deleteUser(@RequestBody @Valid UserDto userDto) {
+//        log.info("Delete user with id: {}", userDto.getUserID());
+//        userService.deleteUser(userDto);
+//    }
 
     @DeleteMapping("delete/{id}")
     public void deleteById(@PathVariable Long id) {

@@ -21,7 +21,7 @@ export class User implements OnInit {
   showList: boolean = false;
   update: boolean = false;
   users: UserDto[] = [];
-  user: UserDto = { name: "", passwordHash: "", email: "", phone: "", packages: undefined };
+  user: UserDto = { name: "", password: "", email: "", phone: "", packages: undefined };
 
   constructor(private service: UserService, private packageService: PackageService) { }
 
@@ -68,6 +68,7 @@ export class User implements OnInit {
           },
       })
     } else {
+      console.log(this.user);
       this.service.createUser(this.user).subscribe({
         next: () => {
           this.ngOnInit();
@@ -82,7 +83,7 @@ export class User implements OnInit {
   }
 
   clearForm(): void {
-    this.user = { name: "", passwordHash: "", email: "", phone: "", packages: undefined};
+    this.user = { name: "", password: "", email: "", phone: "", packages: undefined};
   }
 
   clickCancelButton(): void {

@@ -13,8 +13,6 @@ public class UserDto {
     @NotBlank
     private String name;
     @NotBlank
-    private String passwordHash;
-    @NotBlank
     @Email
     private String email;
     private String phone;

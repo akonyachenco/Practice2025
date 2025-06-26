@@ -1,6 +1,7 @@
 package com.example.package_tracking.service.impl;
 
 import com.example.package_tracking.dto.UserDto;
+import com.example.package_tracking.dto.UserWithPasswordDto;
 import com.example.package_tracking.dto.mapping.UserMapping;
 import com.example.package_tracking.exception.EntityNotFoundException;
 import com.example.package_tracking.model.User;
@@ -49,8 +50,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Transactional
-    public UserDto createUser(UserDto user) {
-        User newUser = userMapping.toEntity(user);
+    public UserDto createUser(UserWithPasswordDto user) {
+        User newUser = userMapping.toEntityWithPassword(user);
         return userMapping.toDto( userRepository.save(newUser));
     }
 
@@ -64,21 +65,21 @@ public class UserServiceImpl implements UserService {
             upUser.setEmail(user.getEmail());
         if(user.getName() != null)
             upUser.setName(user.getName());
-        if(user.getPasswordHash() != null)
-            upUser.setPasswordHash(user.getPasswordHash());
+//        if(user.getPasswordHash() != null)
+//            upUser.setPasswordHash(user.getPasswordHash());
         if(user.getPhone() != null)
             upUser.setPhone(user.getPhone());
         return userMapping.toDto(userRepository.save(upUser));
     }
 
-    @Transactional
-    public void deleteUser(UserDto user) {
-        User delUser = userRepository.findById(user.getUserID()).orElseThrow(() -> {
-            log.warn("User not found with id {}", user.getUserID());
-            return EntityNotFoundException.create("User not found with id", user.getUserID());
-        });
-        userRepository.delete(delUser);
-    }
+//    @Transactional
+//    public void deleteUser(UserDto user) {
+//        User delUser = userRepository.findById(user.getUserID()).orElseThrow(() -> {
+//            log.warn("User not found with id {}", user.getUserID());
+//            return EntityNotFoundException.create("User not found with id", user.getUserID());
+//        });
+//        userRepository.delete(delUser);
+//    }
 
     @Transactional
     public void deleteUserByEmail(String email) {

@@ -22,7 +22,7 @@
 
         @if(!update) {
           <label for="password" style="display: block">Password*</label>
-          <input id="password" [(ngModel)]="user.passwordHash" name="passwordHash" type="password"
+          <input id="password" [(ngModel)]="user.password" name="passwordHash" type="password"
                  placeholder="Enter password" required #password="ngModel">
 
           @if(password.invalid && (password.dirty || password.touched)) {
