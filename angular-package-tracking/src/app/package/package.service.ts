@@ -30,4 +30,8 @@ export class PackageService {
   getPackageById(id: number): Observable<PackageDto> {
     return this.http.get<PackageDto>(this.apiUrl + "/" + id);
   }
+
+getAllPackagesByUserID(id: number): Observable<PackageDto[]> {
+    return  this.http.get<PackageDto[]>(this.apiUrl + "/by-user/" + id);
+}
 }

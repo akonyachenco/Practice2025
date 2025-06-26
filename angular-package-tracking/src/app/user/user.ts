@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from './user.service';
 import { UserDto } from './user.dto';
-import { Router } from '@angular/router';
 import {FormsModule} from '@angular/forms';
+import {PackageService} from '../package/package.service';
+
 
 
 @Component({
@@ -15,35 +16,34 @@ import {FormsModule} from '@angular/forms';
   styleUrls: ['./user.scss']
 })
 export class User implements OnInit {
+  findID: number | undefined = undefined;
+  showList: boolean = false;
   update: boolean = false;
   users: UserDto[] = [];
-  user: UserDto = { name: "", passwordHash: "", email: "", phone: "" };
+  user: UserDto = { name: "", passwordHash: "", email: "", phone: "", packages: undefined };
 
-  constructor(private service: UserService) { }
+  constructor(private service: UserService, private packageService: PackageService) { }
 
   ngOnInit(): void {
-    this.service.getAllUsers().subscribe({
-      next: (users) => {
-        this.users = users;
-      },
-      error: (error) => {
-        console.error('Failed to load users:', error);
-      }
-    });
+    this.showList = false;
+    if(this.findID != undefined)
+      this.clickFindByIDButton(this.findID);
+    else {
+      this.service.getAllUsers().subscribe({
+        next: (users) => {
+          this.users = users;
+        },
+        error: (error) => {
+          console.error('Failed to load users:', error);
+        }
+      });
+    }
   }
 
   clickUpdateButton(user: UserDto): void {
+    window.scrollTo(0, 0);
     this.user = user;
     this.update = true;
-    // this.service.getUserById(user.userID!).subscribe({
-    //   next: () => {
-    //     this.user = user;
-    //   },
-    //   error: (error) => {
-    //     console.error('Failed to find user', error);
-    //   }
-    // })
-    // this.update = true;
   }
 
   onSubmit() {
@@ -76,7 +76,7 @@ export class User implements OnInit {
   }
 
   clearForm(): void {
-    this.user = { name: "", passwordHash: "", email: "", phone: "" };
+    this.user = { name: "", passwordHash: "", email: "", phone: "", packages: undefined};
   }
 
   clickCancelButton(): void {
@@ -93,6 +93,33 @@ export class User implements OnInit {
         console.error('Failed to delete user', error())
     }
     });
+  }
+
+  clickShowListButton(id: number): void {
+    this.packageService.getAllPackagesByUserID(id).subscribe((packages) => {
+      this.user.packages = packages;
+      this.service.getUserById(id).subscribe((user) => {
+        this.user = user;
+      })
+      this.showList = true;
+      this.update = false;
+    })
+  }
+
+  clickHideListButton(): void {
+    this.ngOnInit();
+    this.clearForm();
+  }
+
+  clickFindByIDButton(findID: number): void {
+    this.service.getUserById(findID).subscribe((user) => {
+      this.users = [user];
+    })
+  }
+
+  clickCancelFindButton(): void {
+    this.findID = undefined;
+    this.ngOnInit();
   }
 
 }

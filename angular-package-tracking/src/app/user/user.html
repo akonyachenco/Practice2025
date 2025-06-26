@@ -1,59 +1,113 @@
-<div>
-  <h1>Users info</h1>
-</div>
-<div style="margin: 30px">
-  <form (ngSubmit)="onSubmit()">
-    <label for="username" style="display: block">Username*</label>
-    <input id="username" [(ngModel)]="user.name" name="name" type="text" placeholder="Enter username">
-    <br>
+@if(!showList) {
+  <div>
+    <div>
+      <h1>Users info</h1>
+    </div>
+    <div>
+      <form (ngSubmit)="onSubmit()">
+        <label for="username" style="display: block">Username*</label>
+        <input id="username" [(ngModel)]="user.name" name="name" type="text"
+               placeholder="Enter username" required>
+        <br>
 
-    @if(!update) {
-      <label for="password" style="display: block">Password*</label>
-      <input id="password" [(ngModel)]="user.passwordHash" name="passwordHash" type="password" placeholder="Enter password">
-      <br>
-    }
+        @if(!update) {
+          <label for="password" style="display: block">Password*</label>
+          <input id="password" [(ngModel)]="user.passwordHash" name="passwordHash" type="password"
+                 placeholder="Enter password" required>
+          <br>
+        }
 
-    <label for="phone" style="display: block">Phone</label>
-    <input id="phone" [(ngModel)]="user.phone" name="phone" type="text" placeholder="Enter phone">
-    <br>
+        <label for="phone" style="display: block">Phone</label>
+        <input id="phone" [(ngModel)]="user.phone" name="phone" type="text" placeholder="Enter phone">
+        <br>
 
-    <label for="email" style="display: block">Email*</label>
-    <input id="email" [(ngModel)]="user.email" name="email" type="email" placeholder="Enter email">
-    <br>
+        <label for="email" style="display: block">Email*</label>
+        <input id="email" [(ngModel)]="user.email" name="email" type="email"
+               placeholder="Enter email" required>
+        <br>
 
-    <button class="form-button" type="submit">{{update ? 'Update' : 'Create'}} user</button>
-    @if(update) {
-      <br>
-      <button class="form-button" (click)="clickCancelButton()">Cancel</button>
-    }
-  </form>
-</div>
+        <button class="form-button" type="submit">{{update ? 'Update' : 'Create'}} user</button>
+        @if(update) {
+          <br>
+          <button class="form-button" (click)="clickCancelButton()">Cancel</button>
+        }
+      </form>
+    </div>
 
-<div>
-  <table>
-    <thead>
-    <tr>
-      <th>ID</th>
-      <th>Username</th>
-      <th>Phone</th>
-      <th>Email</th>
-      <th>Action</th>
-    </tr>
-    </thead>
-    <tbody>
-      @for (user of users; track user.userID) {
+    <div>
+
+      <form>
+        <label for="findID">Find User by ID: </label>
+        <input id="findID" [(ngModel)]="findID" name="findID" type="number" placeholder="ID for searching">
+        <button (click)="clickFindByIDButton(findID!)">Search</button>
+        <button (click)="clickCancelFindButton()">Clear</button>
+      </form>
+      <table>
+        <thead>
         <tr>
-          <td>{{user.userID}}</td>
-          <td>{{user.name}}</td>
-          <td>{{user.phone}}</td>
-          <td>{{user.email}}</td>
-          <td>
-            <button (click)="clickUpdateButton(user)">Update</button>
-            <span>  |  </span>
-            <button (click)="clickDeleteButton(user.userID!)">Delete</button>
-          </td>
+          <th>ID</th>
+          <th>Username</th>
+          <th>Phone</th>
+          <th>Email</th>
+          <th>Packages</th>
+          <th>Action</th>
         </tr>
-      }
-    </tbody>
-  </table>
-</div>
+        </thead>
+        <tbody>
+          @for (user of users; track user.userID) {
+            <tr>
+              <td>{{user.userID}}</td>
+              <td>{{user.name}}</td>
+              <td>{{user.phone}}</td>
+              <td>{{user.email}}</td>
+              <td>
+                @if(user.packages?.length != 0) {
+                  <button (click)="clickShowListButton(user.userID!)">Show</button>
+                }
+              </td>
+              <td>
+                <button (click)="clickUpdateButton(user)">Update</button>
+                <span>|  </span>
+                <button (click)="clickDeleteButton(user.userID!)">Delete</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+}
+@else {
+  <div>
+    <div>
+      <h1>{{user.name}} packages</h1>
+    </div>
+    <div>
+      <table>
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Tracking Number</th>
+          <th>User ID</th>
+          <th>Weight</th>
+          <th>Dimensions</th>
+          <th>Description</th>
+        </tr>
+        </thead>
+        <tbody>
+          @for (pkg of user.packages; track pkg.packageID) {
+            <tr>
+              <td>{{pkg.packageID}}</td>
+              <td>{{pkg.trackingNumber}}</td>
+              <td>{{pkg.userID}}</td>
+              <td>{{pkg.weight}}</td>
+              <td>{{pkg.dimensions}}</td>
+              <td>{{pkg.description}}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+      <button class="form-button" (click)="clickHideListButton()">Cancel</button>
+    </div>
+  </div>
+}
