@@ -26,13 +26,14 @@ export class User implements OnInit {
   constructor(private service: UserService, private packageService: PackageService) { }
 
   ngOnInit(): void {
+
     this.showList = false;
     if(this.findID != undefined)
       this.clickFindByIDButton(this.findID);
     else {
       this.service.getAllUsers().subscribe({
         next: (users) => {
-          this.users = users;
+          this.users = users.sort((a,b) => (a.userID ?? 0) - (b.userID ?? 0));
         },
         error: (error) => {
           console.error('Failed to load users:', error);

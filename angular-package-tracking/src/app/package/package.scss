@@ -144,3 +144,25 @@ button:disabled {
   margin-right: 8px;
   font-size: 16px;
 }
+
+.delete-button {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.delete-button:hover {
+  background-color: #c0392b;
+}
+
+.delete-button {
+  transition: all 0.3s ease;
+}
+
+
+button:not(.delete-button) {
+  background-color: #3498db;
+}
+
+button:not(.delete-button):hover {
+  background-color: #2980b9;
+}
