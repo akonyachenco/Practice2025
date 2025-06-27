@@ -8,7 +8,7 @@
         <p>{{errorMessage}}</p>
       </div>
     }
-    <form (ngSubmit)="onSubmit()" #statusForm="ngForm" (submit)="statusForm.reset()">
+    <form (ngSubmit)="onSubmit()" #statusForm="ngForm" (submit)="statusForm.control.markAsPristine(); statusForm.control.markAsUntouched()">
       <label for="status" style="display: block">Status*</label>
       <input id="status" [(ngModel)]="status.status" name="status"
              type="text" placeholder="Enter status" required #statusInput="ngModel">
@@ -29,15 +29,17 @@
              type="datetime-local">
       <br>
 
-      <label for="deliveryID" style="display: block">Delivery ID*</label>
-      <input id="deliveryID" [(ngModel)]="status.deliveryID" name="deliveryID"
-             type="number" placeholder="Enter delivery ID" required #deliveryID="ngModel">
-      @if(deliveryID.invalid && (deliveryID.dirty || deliveryID.touched)) {
-        <div class="alert-message error with-icon">
-          <p>Delivery ID is required</p>
-        </div>
+      @if(!update) {
+        <label for="deliveryID" style="display: block">Delivery ID*</label>
+        <input id="deliveryID" [(ngModel)]="status.deliveryID" name="deliveryID"
+               type="number" placeholder="Enter delivery ID" required #deliveryID="ngModel">
+        @if(deliveryID.invalid && (deliveryID.dirty || deliveryID.touched)) {
+          <div class="alert-message error with-icon">
+            <p>Delivery ID is required</p>
+          </div>
+        }
+        <br>
       }
-      <br>
 
       <button class="form-button" type="submit" [disabled]="!statusForm.form.valid">
         {{update ? 'Update' : 'Create'}} status

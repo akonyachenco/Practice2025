@@ -61,6 +61,10 @@ export class User implements OnInit {
           error: (error) => {
             console.error('Failed to update user:', error);
             this.errorMessage = error.error.message;
+            setTimeout(() => {
+              this.errorMessage = null;
+            }, 5000)
+            window.scrollTo(0, 0);
             this.service.getUserById(this.user.userID!).subscribe((user) => {
               this.user = user;
             });
@@ -68,7 +72,6 @@ export class User implements OnInit {
           },
       })
     } else {
-      console.log(this.user);
       this.service.createUser(this.user).subscribe({
         next: () => {
           this.ngOnInit();
@@ -77,6 +80,10 @@ export class User implements OnInit {
         error: (error) => {
           console.error('Failed to create user:', error);
           this.errorMessage = error.error.message;
+          setTimeout(() => {
+            this.errorMessage = null;
+          }, 5000)
+          window.scrollTo(0, 0);
         }
       });
     }
@@ -98,8 +105,13 @@ export class User implements OnInit {
         next: () => {
           this.ngOnInit();
         },
-        error: (error)=>  {
-          console.error('Failed to delete user', error())
+        error: (error) => {
+          console.error('Failed to delete user', error)
+          this.errorMessage = error.error.message;
+          setTimeout(() => {
+            this.errorMessage = null;
+          }, 5000)
+          window.scrollTo(0, 0);
         }
       });
     }

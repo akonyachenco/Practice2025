@@ -31,7 +31,7 @@ export class DeliveryStatus implements OnInit {
     } else {
       this.service.getAllDeliveryStatuses().subscribe({
         next: (statuses) => {
-          this.statuses = statuses;
+          this.statuses = statuses.sort((a,b) => (a.deliveryStatusID ?? 0) - (b.deliveryStatusID ?? 0));
         },
         error: (error) => {
           console.error('Failed to load delivery statuses:', error);
@@ -54,6 +54,10 @@ export class DeliveryStatus implements OnInit {
         error: (error) => {
           console.error('Failed to update delivery status:', error);
           this.errorMessage = error.error.message;
+          setTimeout(() => {
+            this.errorMessage = null;
+          }, 5000)
+          window.scrollTo(0, 0);
           this.service.getDeliveryStatusById(this.status.deliveryStatusID!).subscribe((status) => {
             this.status = status;
           });
@@ -83,6 +87,10 @@ export class DeliveryStatus implements OnInit {
         error: (error) => {
           console.error('Failed to create delivery status:', error);
           this.errorMessage = error.error.message;
+          setTimeout(() => {
+            this.errorMessage = null;
+          }, 5000)
+          window.scrollTo(0, 0);
         }
       });
     }

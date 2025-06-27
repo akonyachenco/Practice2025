@@ -30,7 +30,7 @@ export class CourierService implements OnInit {
     } else {
       this.service.getAllCourierServices().subscribe({
         next: (services) => {
-          this.courierServices = services;
+          this.courierServices = services.sort((a,b) => (a.courierServiceID ?? 0) - (b.courierServiceID ?? 0));
         },
         error: (error) => {
           console.error('Failed to load courier services:', error);
@@ -58,6 +58,10 @@ export class CourierService implements OnInit {
         error: (error) => {
           console.error('Failed to update courier service:', error);
           this.errorMessage = error.error.message;
+          setTimeout(() => {
+            this.errorMessage = null;
+          }, 5000)
+          window.scrollTo(0, 0);
           this.service.getCourierServiceById(this.courierService.courierServiceID!).subscribe((service) => {
             this.courierService = service;
           });
@@ -72,6 +76,11 @@ export class CourierService implements OnInit {
         },
         error: (error) => {
           console.error('Failed to create courier service:', error);
+          this.errorMessage = error.error.message;
+          setTimeout(() => {
+            this.errorMessage = null;
+          }, 5000)
+          window.scrollTo(0, 0);
         }
       });
     }
@@ -98,6 +107,11 @@ export class CourierService implements OnInit {
         },
         error: (error) => {
           console.error('Failed to delete courier service', error)
+          this.errorMessage = error.error.message;
+          setTimeout(() => {
+            this.errorMessage = null;
+          }, 5000)
+          window.scrollTo(0, 0);
         }
       });
     }

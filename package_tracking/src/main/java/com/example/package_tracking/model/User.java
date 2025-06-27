@@ -28,7 +28,7 @@ public class User {
     @Column(name = "email", length = 255)
     private String email;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user")
     private List<Package> packages = new ArrayList<>();
 
 }

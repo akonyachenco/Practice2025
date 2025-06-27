@@ -31,7 +31,7 @@ public class Delivery {
     @Column(name = "estimated_delivery_date")
     private LocalDateTime estimatedDeliveryDate;
 
-    @OneToMany(mappedBy = "delivery", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "delivery")
     private List<DeliveryStatus> statusHistory = new ArrayList<>();
 
 }

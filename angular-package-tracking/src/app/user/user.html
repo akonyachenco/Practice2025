@@ -9,7 +9,7 @@
           <p>{{errorMessage}}</p>
         </div>
       }
-      <form (ngSubmit)="onSubmit()" #userForm="ngForm" (submit)="userForm.reset()">
+      <form (ngSubmit)="onSubmit()" #userForm="ngForm" (submit)="userForm.control.markAsPristine(); userForm.control.markAsUntouched()">
         <label for="username" style="display: block">Username*</label>
         <input id="username" [(ngModel)]="user.name" name="name" type="text"
                placeholder="Enter username" required #name="ngModel">

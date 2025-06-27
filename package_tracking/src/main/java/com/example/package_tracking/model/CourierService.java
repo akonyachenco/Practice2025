@@ -27,6 +27,6 @@ public class CourierService {
     @Column(name = "website", length = 255)
     private String website;
 
-    @OneToMany(mappedBy = "courierService", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "courierService")
     private List<Delivery> deliveries = new ArrayList<>();
 }

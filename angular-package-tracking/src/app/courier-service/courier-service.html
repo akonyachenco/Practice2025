@@ -8,7 +8,7 @@
         <p>{{errorMessage}}</p>
       </div>
     }
-    <form (ngSubmit)="onSubmit()" #serviceForm="ngForm" (submit)="serviceForm.reset()">
+    <form (ngSubmit)="onSubmit()" #serviceForm="ngForm" (submit)="serviceForm.control.markAsPristine(); serviceForm.control.markAsUntouched()">
       <label for="name" style="display: block">Name*</label>
       <input id="name" [(ngModel)]="courierService.name" name="name"
              type="text" placeholder="Enter name" required #name="ngModel">

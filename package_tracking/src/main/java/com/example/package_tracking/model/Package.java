@@ -32,7 +32,7 @@ public class Package {
     @Column(name = "description", columnDefinition = "text")
     private String description;
 
-    @OneToMany(mappedBy = "pkg", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "pkg" )
     private List<Delivery> deliveries = new ArrayList<>();
 
 }

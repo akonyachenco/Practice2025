@@ -34,7 +34,7 @@ export class Delivery implements OnInit {
     } else {
       this.service.getAllDeliveries().subscribe({
         next: (deliveries) => {
-          this.deliveries = deliveries;
+          this.deliveries = deliveries.sort((a,b) => (a.deliveryID ?? 0) - (b.deliveryID ?? 0));
         },
         error: (error) => {
           console.error('Failed to load deliveries:', error);
@@ -57,6 +57,10 @@ export class Delivery implements OnInit {
         error: (error) => {
           console.error('Failed to update delivery:', error);
           this.errorMessage = error.error.message;
+          setTimeout(() => {
+            this.errorMessage = null;
+          }, 5000)
+          window.scrollTo(0, 0);
           this.service.getDeliveryById(this.delivery.deliveryID!).subscribe((delivery) => {
             this.delivery = delivery;
           });
@@ -68,6 +72,10 @@ export class Delivery implements OnInit {
         error: (error) => {
           console.error('Failed to update delivery:', error);
           this.errorMessage = error.error.message;
+          setTimeout(() => {
+            this.errorMessage = null;
+          }, 5000)
+          window.scrollTo(0, 0);
           this.service.getDeliveryById(this.delivery.deliveryID!).subscribe((delivery) => {
             this.delivery = delivery;
           });
@@ -97,6 +105,10 @@ export class Delivery implements OnInit {
         error: (error) => {
           console.error('Failed to create delivery:', error);
           this.errorMessage = error.error.message;
+          setTimeout(() => {
+            this.errorMessage = null;
+          }, 5000)
+          window.scrollTo(0, 0);
         }
       });
     }
@@ -123,6 +135,11 @@ export class Delivery implements OnInit {
         },
         error: (error) => {
           console.error('Failed to delete delivery', error)
+          this.errorMessage = error.error.message;
+          setTimeout(() => {
+            this.errorMessage = null;
+          }, 5000)
+          window.scrollTo(0, 0);
         }
       });
     }

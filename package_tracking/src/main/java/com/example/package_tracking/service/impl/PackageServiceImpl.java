@@ -81,7 +81,7 @@ public class PackageServiceImpl implements PackageService {
             newPackage.setTrackingNumber(pkg.getTrackingNumber());
         if(pkg.getWeight() != null)
             newPackage.setWeight(pkg.getWeight());
-        if(pkg.getDescription() != null)
+        if(pkg.getDimensions() != null)
             newPackage.setDimensions(pkg.getDimensions());
         if(pkg.getDescription() != null)
             newPackage.setDescription(pkg.getDescription());

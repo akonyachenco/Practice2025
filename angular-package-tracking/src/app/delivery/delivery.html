@@ -8,10 +8,20 @@
         <p>{{errorMessage}}</p>
       </div>
     }
-    <form (ngSubmit)="onSubmit()" #deliveryForm="ngForm" (submit)="deliveryForm.reset()">
+    <form (ngSubmit)="onSubmit()" #deliveryForm="ngForm" (submit)="deliveryForm.control.markAsPristine(); deliveryForm.control.markAsUntouched()">
       <label for="cost" style="display: block">Cost (rub.)</label>
       <input id="cost" [(ngModel)]="delivery.cost" name="cost"
-             type="number" step="0.01" placeholder="Enter cost">
+             type="number" step="0.01" placeholder="Enter cost" #cost="ngModel" min="0" max="100000">
+      @if(cost.invalid && (cost.dirty || cost.touched)) {
+        <div class="alert-message error with-icon">
+          @if(cost.errors?.['max']) {
+            <p>The cost cannot be higher than 100000 rub.</p>
+          }
+          @if(cost.errors?.['min']) {
+            <p>The cost must be positive</p>
+          }
+        </div>
+      }
       <br>
 
       <label for="estimatedDeliveryDate" style="display: block">Estimated Delivery Date</label>
@@ -19,26 +29,27 @@
              name="estimatedDeliveryDate" type="datetime-local">
       <br>
 
-      <label for="packageID" style="display: block">Package ID*</label>
-      <input id="packageID" [(ngModel)]="delivery.packageID" name="packageID"
-             type="number" placeholder="Enter package ID" required #packageID="ngModel">
-      @if(packageID.invalid && (packageID.dirty || packageID.touched)) {
-        <div class="alert-message error with-icon">
-          <p>Package ID is required</p>
-        </div>
-      }
-      <br>
+      @if(!update) {
+        <label for="packageID" style="display: block">Package ID*</label>
+        <input id="packageID" [(ngModel)]="delivery.packageID" name="packageID"
+               type="number" placeholder="Enter package ID" required #packageID="ngModel">
+        @if(packageID.invalid && (packageID.dirty || packageID.touched)) {
+          <div class="alert-message error with-icon">
+            <p>Package ID is required</p>
+          </div>
+        }
+        <br>
 
-      <label for="courierServiceID" style="display: block">Courier Service ID*</label>
-      <input id="courierServiceID" [(ngModel)]="delivery.courierServiceID"
-             name="courierServiceID" type="number" placeholder="Enter courier service ID" required #courierServiceID="ngModel">
-      @if(courierServiceID.invalid && (courierServiceID.dirty || courierServiceID.touched)) {
-        <div class="alert-message error with-icon">
-          <p>Courier Service ID is required</p>
-        </div>
+        <label for="courierServiceID" style="display: block">Courier Service ID*</label>
+        <input id="courierServiceID" [(ngModel)]="delivery.courierServiceID"
+               name="courierServiceID" type="number" placeholder="Enter courier service ID" required #courierServiceID="ngModel">
+        @if(courierServiceID.invalid && (courierServiceID.dirty || courierServiceID.touched)) {
+          <div class="alert-message error with-icon">
+            <p>Courier Service ID is required</p>
+          </div>
+        }
+        <br>
       }
-      <br>
-
       <button class="form-button" type="submit" [disabled]="!deliveryForm.form.valid">
         {{update ? 'Update' : 'Create'}} delivery
       </button>

@@ -50,7 +50,9 @@ public class PackageController {
 
     @PutMapping("update")
     public PackageDto updatePackage(@RequestBody PackageDto pkgDto) {
+        log.info(pkgDto.toString());
         log.info("Update package with id: {}", pkgDto.getPackageID());
+        log.info(packageService.updatePackage(pkgDto).toString());
         return packageService.updatePackage(pkgDto);
     }
 

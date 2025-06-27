@@ -8,7 +8,7 @@
         <p>{{errorMessage}}</p>
       </div>
     }
-    <form (ngSubmit)="onSubmit()" #packageForm="ngForm" (submit)="packageForm.reset()">
+    <form (ngSubmit)="onSubmit()" #packageForm="ngForm" (submit)="packageForm.control.markAsPristine(); packageForm.control.markAsUntouched()">
       <label for="trackingNumber" style="display: block">Tracking Number*</label>
       <input id="trackingNumber" [(ngModel)]="pkg.trackingNumber" name="trackingNumber"
              type="text" placeholder="Enter tracking number" required #trackingNumber="ngModel">
@@ -19,20 +19,34 @@
       }
       <br>
 
-      <label for="userID" style="display: block">User ID*</label>
-      <input id="userID" [(ngModel)]="pkg.userID" name="userID"
-             type="number" placeholder="Enter user ID" required #userID="ngModel">
-      @if(userID.invalid && (userID.dirty || userID.touched)) {
-        <div class="alert-message error with-icon">
-          <p>User ID is required</p>
-        </div>
+      @if(!update) {
+        <label for="userID" style="display: block">User ID*</label>
+        <input id="userID" [(ngModel)]="pkg.userID" name="userID"
+               type="number" placeholder="Enter user ID" required #userID="ngModel">
+        @if(userID.invalid && (userID.dirty || userID.touched)) {
+          <div class="alert-message error with-icon">
+            <p>User ID is required</p>
+          </div>
+        }
+        <br>
       }
-      <br>
 
       <label for="weight" style="display: block">Weight (kg)</label>
       <input id="weight" [(ngModel)]="pkg.weight"
              name="weight"
-             type="number" step="0.1" placeholder="Enter weight in kg">
+             type="number" step="0.1" placeholder="Enter weight in kg"
+             min="0"
+      max="100" #weight="ngModel">
+      @if(weight.invalid && (weight.dirty || weight.touched)) {
+        <div class="alert-message error with-icon">
+          @if(weight.errors?.['max']) {
+            <p>The weight cannot be higher than 100 kg.</p>
+          }
+          @if(weight.errors?.['min']) {
+            <p>The weight must be positive</p>
+          }
+        </div>
+      }
       <br>
 
       <label for="dimensions" style="display: block">Dimensions</label>

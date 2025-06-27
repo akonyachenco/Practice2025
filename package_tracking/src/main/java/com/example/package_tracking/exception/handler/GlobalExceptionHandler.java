@@ -30,18 +30,38 @@ public class    GlobalExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<Map<String, String>> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
         Map<String, String> error = new HashMap<>();
-        error.put("message", extractUnique(ex.getMostSpecificCause().getMessage()));
+        String errorMessage = ex.getMostSpecificCause().getMessage();
+        log.error(errorMessage);
 
+        if(errorMessage.contains("нарушает ограничение уникальности")) {
+            error.put("message", extractUnique(errorMessage));
+            log.error(extractUnique(errorMessage));
+        }
+        else if (errorMessage.contains("нарушает ограничение внешнего ключа")) {
+            error.put("message", extractForeign(errorMessage));
+        }
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
+
     private String extractUnique(String message) {
-        Pattern uniquePattern = Pattern.compile("\\(([a-zA-Z_]+)\\)=\\(([^)]+)\\)");
+        Pattern uniquePattern = Pattern.compile("\\(([\\w\\s,]+)\\)=\\(([^)]+)\\)");
         Matcher matcher = uniquePattern.matcher(message);
 
         if (matcher.find()) {
             String field = matcher.group(1);
             String value = matcher.group(2);
             return "Already exists " + field.toUpperCase() + " = " + value;
+        }
+        return message;
+    }
+
+    private String extractForeign(String message) {
+        Pattern fkPattern = Pattern.compile("таблицы \"([^\"]+)\"");
+        Matcher matcher = fkPattern.matcher(message);
+
+        if (matcher.find()) {
+            String table = matcher.group(1);
+            return "Cannot delete: record is referenced in table " + table.toUpperCase();
         }
         return message;
     }

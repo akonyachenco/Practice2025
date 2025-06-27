@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { PackageService } from './package.service';
 import { PackageDto } from './package.dto';
-import { FormsModule, Validators, FormControl, FormGroup } from '@angular/forms';
+import { FormsModule} from '@angular/forms';
 import {UserService} from '../user/user.service';
+
 
 @Component({
   selector: 'app-package',
@@ -23,7 +24,8 @@ export class Package implements OnInit {
     userID: 0,
     weight: undefined,
     dimensions: "",
-    description: ""
+    description: "",
+    deliveries: []
   };
 
   constructor(private service: PackageService, private userService: UserService) { }
@@ -34,7 +36,7 @@ export class Package implements OnInit {
     } else {
       this.service.getAllPackages().subscribe({
         next: (packages) => {
-          this.packages = packages;
+          this.packages = packages.sort((a,b) => (a.packageID ?? 0) - (b.packageID ?? 0));
         },
         error: (error) => {
           console.error('Failed to load packages:', error);
@@ -57,6 +59,10 @@ export class Package implements OnInit {
         error: (error) => {
           console.error('Failed to update package:', error);
           this.errorMessage = error.error.message;
+          setTimeout(() => {
+            this.errorMessage = null;
+          }, 5000)
+          window.scrollTo(0, 0);
           this.service.getPackageById(this.pkg.packageID!).subscribe((pkg) => {
             this.pkg = pkg;
           });
@@ -70,13 +76,36 @@ export class Package implements OnInit {
           this.clearForm();
           this.ngOnInit();
         },
-        error: () => {
+        error: (error) => {
+          if(this.errorMessage == null) {
+            this.errorMessage = error.error.message;
+            setTimeout(() => {
+              this.errorMessage = null;
+            }, 5000)
+            window.scrollTo(0, 0);
+          }
           this.service.getPackageById(this.pkg.packageID!).subscribe((pkg) => {
             this.pkg = pkg;
           });
           this.ngOnInit();
         },
       })
+    }
+    else {
+      this.service.createPackage(this.pkg).subscribe({
+        next: () => {
+          this.ngOnInit();
+          this.clearForm();
+        },
+        error: (error) => {
+          console.error('Failed to create user:', error);
+          this.errorMessage = error.error.message;
+          setTimeout(() => {
+            this.errorMessage = null;
+          }, 5000)
+          window.scrollTo(0, 0);
+        }
+      });
     }
   }
 
@@ -86,7 +115,8 @@ export class Package implements OnInit {
       userID: 0,
       weight: undefined,
       dimensions: "",
-      description: ""
+      description: "",
+      deliveries: []
     };
   }
 
@@ -103,7 +133,12 @@ export class Package implements OnInit {
           this.ngOnInit();
         },
         error: (error) => {
+          window.scrollTo(0, 0);
           console.error('Failed to delete package', error)
+          this.errorMessage = error.error.message;
+          setTimeout(() => {
+            this.errorMessage = null;
+          }, 5000)
         }
       });
     }
